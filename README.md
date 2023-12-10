@@ -37,7 +37,7 @@ export default defineConfig({
 
 ### Astro
 
-Only `output: server` is supported. For fully static sites, remove `adapter` and `output` (or use `output: static`), and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
+Only `output: server` is supported. For fully static sites, remove `adapter` and `output` (or use `output: 'static'`), and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
 
 ### AWS Amplify 
 AWS Amplify uses Node.js 16 by default for its build environment, which isn't supported by Astro v3.0+.
