@@ -8,19 +8,14 @@ Experimental Astro adapter for hosting Astro v4.0 sites on AWS Amplify with SSR.
 
 ```sh
 # Using NPM
-npx astro add astro-aws-amplify
-# Using Yarn
-yarn astro add astro-aws-amplify
-# Using PNPM
-pnpm astro add astro-aws-amplify
-```
-
-### Manual Installation
-
-```sh
-# Using NPM
 npm install astro-aws-amplify
+# Using Yarn
+yarn add astro-aws-amplify
+# Using PNPM
+pnpm add astro-aws-amplify
 ```
+
+Add the adapter to your Astro config:
 
 ```diff
 // astro.config.mjs
