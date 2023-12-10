@@ -1,0 +1,42 @@
+{
+  "name": "astro-aws-amplify",
+  "version": "0.0.1",
+  "private": false,
+  "description": "Deploy Astro to AWS Amplify (SSR)",
+  "keywords": [
+    "astro",
+    "astro-component",
+    "withastro",
+    "astro-adapter",
+    "astro-integration",
+    "aws",
+    "amplify",
+    "ssr"
+  ],
+  "license": "MIT",
+  "author": "Alex <me@alexnguyen.co.nz>",
+  "bugs": "https://github.com/alexnguyennz/astro-aws-amplify/issues",
+  "homepage": "https://github.com/alexnguyennz/astro-aws-amplify",
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./server": "./src/server.ts"
+  },
+  "peerDependencies": {
+    "astro": "^4.0.3"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.3.1",
+    "astro": "^4.0.3",
+    "send": "^0.18.0",
+    "server-destroy": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/send": "^0.17.4",
+    "@types/server-destroy": "^1.0.3"
+  }
+}
