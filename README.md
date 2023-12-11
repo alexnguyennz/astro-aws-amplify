@@ -44,29 +44,50 @@ As a workaround, use a different Node.js image like the minimum supported `18.14
 Build image (Edit build image settings > Build image dropdown):
 ```markdown
 public.ecr.aws/docker/library/node:18.14.1
-
 ```
 
 #### Build specification examples
 
 Your build specification must point to `.amplify-hosting` as the build directory - this is used instead of the default `dist` as required by AWS Amplify's [SSR deployment specification](https://docs.aws.amazon.com/amplify/latest/userguide/ssr-deployment-specification.html).
 
-Below are examples that you can use - either create an `amplify.yml` in your project's root directory, or change the build settings manually in your Amplify app settings.
+Either create an `amplify.yml` in your project's root directory which Amplify will use for deployment, or change the build settings manually in your Amplify app settings.
 
-For a monorepo setup, you can use something similar to this monorepo's pnpm config, or read the [documentation](https://docs.aws.amazon.com/amplify/latest/userguide/monorepo-configuration.html) for more.
+For a monorepo setup, you can use something similar to this monorepo's pnpm config, and read the [documentation](https://docs.aws.amazon.com/amplify/latest/userguide/monorepo-configuration.html) for more.
 
 ##### npm
 
-To Do
+```yaml
+# TO DO
+```
 
 ##### pnpm
 
-To Do
+```yaml
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm i -g pnpm
+        - pnpm config set store-dir .pnpm-store
+        - pnpm i
+    build:
+      commands:
+        - pnpm run build
+  artifacts:
+    baseDirectory: .amplify-hosting
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .pnpm-store/**/*
+```
 
 ##### Yarn
 
-To Do
-
+```yaml
+# TO DO
+```
 
 ### Static or prerendered pages
 All pages must be server-rendered by default - you can't use `export const prerender = true` on any pages. As a workaround for static pages however, you can set a manual Amplify rewrite for every static route.
