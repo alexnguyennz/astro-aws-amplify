@@ -35,6 +35,8 @@ export default defineConfig({
 Only `output: server` is supported. For fully static sites, remove `adapter` and `output` (or use `output: 'static'`), and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
 
 ### AWS Amplify 
+
+#### Build Image
 AWS Amplify uses Node.js 16 by default for its build environment, which isn't supported by Astro v3.0+.
 
 As a workaround, use a different Node.js image like the minimum supported `18.14.1`. This will increase the deployment time.
@@ -42,7 +44,29 @@ As a workaround, use a different Node.js image like the minimum supported `18.14
 Build image (Edit build image settings > Build image dropdown):
 ```markdown
 public.ecr.aws/docker/library/node:18.14.1
+
 ```
+
+#### Build specification examples
+
+Your build specification must point to `.amplify-hosting` as the build directory - this is used instead of the default `dist` as required by AWS Amplify's [SSR deployment specification](https://docs.aws.amazon.com/amplify/latest/userguide/ssr-deployment-specification.html).
+
+Below are examples that you can use - either create an `amplify.yml` in your project's root directory, or change the build settings manually in your Amplify app settings.
+
+For a monorepo setup, you can use something similar to this monorepo's pnpm config, or read the [documentation](https://docs.aws.amazon.com/amplify/latest/userguide/monorepo-configuration.html) for more.
+
+##### npm
+
+To Do
+
+##### pnpm
+
+To Do
+
+##### Yarn
+
+To Do
+
 
 ### Static or prerendered pages
 All pages must be server-rendered by default - you can't use `export const prerender = true` on any pages. As a workaround for static pages however, you can set a manual Amplify rewrite for every static route.

@@ -5,6 +5,7 @@ applications:
       phases:
         preBuild:
           commands:
+            - nvm install 18.14.1
             - npm i -g pnpm
             - pnpm config set store-dir .pnpm-store
             - pnpm i
