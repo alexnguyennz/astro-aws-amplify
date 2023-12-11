@@ -35,6 +35,8 @@ export default defineConfig({
 Only `output: server` is supported. For fully static sites, remove `adapter` and `output` (or use `output: 'static'`), and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
 
 ### AWS Amplify 
+
+#### Build Image
 AWS Amplify uses Node.js 16 by default for its build environment, which isn't supported by Astro v3.0+.
 
 As a workaround, use a different Node.js image like the minimum supported `18.14.1`. This will increase the deployment time.
@@ -42,6 +44,49 @@ As a workaround, use a different Node.js image like the minimum supported `18.14
 Build image (Edit build image settings > Build image dropdown):
 ```markdown
 public.ecr.aws/docker/library/node:18.14.1
+```
+
+#### Build specification examples
+
+Your build specification must point to `.amplify-hosting` as the build directory - this is used instead of the default `dist` as required by AWS Amplify's [SSR deployment specification](https://docs.aws.amazon.com/amplify/latest/userguide/ssr-deployment-specification.html).
+
+Either create an `amplify.yml` in your project's root directory which Amplify will use for deployment, or change the build settings manually in your Amplify app settings.
+
+For a monorepo setup, you can use something similar to this monorepo's pnpm config, and read the [documentation](https://docs.aws.amazon.com/amplify/latest/userguide/monorepo-configuration.html) for more.
+
+##### npm
+
+```yaml
+# TO DO
+```
+
+##### pnpm
+
+```yaml
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm i -g pnpm
+        - pnpm config set store-dir .pnpm-store
+        - pnpm i
+    build:
+      commands:
+        - pnpm run build
+  artifacts:
+    baseDirectory: .amplify-hosting
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .pnpm-store/**/*
+```
+
+##### Yarn
+
+```yaml
+# TO DO
 ```
 
 ### Static or prerendered pages
