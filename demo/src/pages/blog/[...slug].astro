@@ -5,7 +5,6 @@ import BlogPost from '../../layouts/BlogPost.astro';
 const { slug } = Astro.params;
 const post = await getEntry("blog", slug)
 
-console.log("post", post)
 const { Content } = await post.render();
 ---
 

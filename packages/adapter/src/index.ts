@@ -28,7 +28,7 @@ export default function amplify(): AstroIntegration {
             serverOutput: 'stable',
             assets: {
               supportKind: 'stable',
-              isSharpCompatible: false,
+              isSharpCompatible: true,
               isSquooshCompatible: false,
             },
           },
