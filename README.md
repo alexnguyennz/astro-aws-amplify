@@ -2,6 +2,8 @@
 
 Experimental Astro adapter for hosting Astro v4.0 sites on AWS Amplify with SSR.
 
+[View Demo](https://main.dy0rr16jdndpq.amplifyapp.com/)
+
 ## Usage
 
 ### Installation
@@ -9,13 +11,11 @@ Experimental Astro adapter for hosting Astro v4.0 sites on AWS Amplify with SSR.
 ```sh
 # Using NPM
 npm install astro-aws-amplify
-# Using Yarn
+# Using Yarn 
 yarn add astro-aws-amplify
 # Using PNPM
 pnpm add astro-aws-amplify
 ```
-
-Add the adapter to your Astro config:
 
 ```diff
 // astro.config.mjs
@@ -32,61 +32,14 @@ export default defineConfig({
 
 ### Astro
 
-Only `output: server` is supported. For fully static sites, remove `adapter` and `output` (or use `output: 'static'`), and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
+Only `output: server` is currently supported. For fully static sites, remove `adapter` and `output` (or use `output: static`), and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
 
-### AWS Amplify 
-
-#### Build Image
-AWS Amplify uses Node.js 16 by default for its build environment, which isn't supported by Astro v3.0+.
-
-As a workaround, use a different Node.js image like the minimum supported `18.14.1`. This will increase the deployment time.
+### AWS Amplify
+AWS Amplify uses Node.js 16 with its default `Amazon Linux:2` build image, which isn't supported by Astro v3.0+. You will need to use the newer `Amazon Linux:2023`.
 
 Build image (Edit build image settings > Build image dropdown):
 ```markdown
-public.ecr.aws/docker/library/node:18.14.1
-```
-
-#### Build specification examples
-
-Your build specification must point to `.amplify-hosting` as the build directory - this is used instead of the default `dist` as required by AWS Amplify's [SSR deployment specification](https://docs.aws.amazon.com/amplify/latest/userguide/ssr-deployment-specification.html).
-
-Either create an `amplify.yml` in your project's root directory which Amplify will use for deployment, or change the build settings manually in your Amplify app settings.
-
-For a monorepo setup, you can use something similar to this monorepo's pnpm config, and read the [documentation](https://docs.aws.amazon.com/amplify/latest/userguide/monorepo-configuration.html) for more.
-
-##### npm
-
-```yaml
-# TO DO
-```
-
-##### pnpm
-
-```yaml
-version: 1
-frontend:
-  phases:
-    preBuild:
-      commands:
-        - npm i -g pnpm
-        - pnpm config set store-dir .pnpm-store
-        - pnpm i
-    build:
-      commands:
-        - pnpm run build
-  artifacts:
-    baseDirectory: .amplify-hosting
-    files:
-      - '**/*'
-  cache:
-    paths:
-      - .pnpm-store/**/*
-```
-
-##### Yarn
-
-```yaml
-# TO DO
+Amazon Linux:2023
 ```
 
 ### Static or prerendered pages
@@ -98,20 +51,25 @@ For example, if you have a static `/about` page, create a rewrite of:
 
 If you don't force [trailing slashes](https://docs.astro.build/en/reference/configuration-reference/#trailingslash) or use page links with trailing slashes, you will need to also add:
 
-`/about /about/index.html 200 (Rewrite)` 
+`/about /about/index.html 200 (Rewrite)`
 
 For static dynamic routes, for example, a route of `/blog/[slug].astro`, create a rewrite of:
 
 `/blog/<slug>/ /blog/<slug>/index.html 200 (Rewrite)`
 
+## Features
+
+### Supported
+- image optimization with `<Image>` and `<Picture />` (tentative)
+
 ### Unsupported / Untested
-- image optimization e.g. with `<Image />`
+- hybrid mode
 - middleware
 - base path (and other Astro configuration changes)
 
 ## Monorepo Project Setup
 
-### Installation 
+### Installation
 
 ```sh
 pnpm install
@@ -157,10 +115,10 @@ applications:
 
 Build image settings:
 ```markdown
-public.ecr.aws/docker/library/node:18.14.1
+Amazon Linux:2023
 ```
 
-## License 
+## License
 MIT
 
 ## Acknowledgements

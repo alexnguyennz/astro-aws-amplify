@@ -2,24 +2,19 @@
 
 Experimental Astro adapter for hosting Astro v4.0 sites on AWS Amplify with SSR.
 
+[View Demo](https://main.dy0rr16jdndpq.amplifyapp.com/)
+
 ## Usage
 
 ### Installation
 
 ```sh
 # Using NPM
-npx astro add astro-aws-amplify
-# Using Yarn
-yarn astro add astro-aws-amplify
-# Using PNPM
-pnpm astro add astro-aws-amplify
-```
-
-### Manual Installation
-
-```sh
-# Using NPM
 npm install astro-aws-amplify
+# Using Yarn 
+yarn add astro-aws-amplify
+# Using PNPM
+pnpm add astro-aws-amplify
 ```
 
 ```diff
@@ -37,16 +32,14 @@ export default defineConfig({
 
 ### Astro
 
-Only `output: server` is supported. For fully static sites, remove `adapter` and `output` (or use `output: static`), and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
+Only `output: server` is currently supported. For fully static sites, remove `adapter` and `output` (or use `output: static`), and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
 
 ### AWS Amplify
-AWS Amplify uses Node.js 16 by default for its build environment, which isn't supported by Astro v3.0+.
-
-As a workaround, use a different Node.js image like the minimum supported `18.14.1`. This will increase the deployment time.
+AWS Amplify uses Node.js 16 with its default `Amazon Linux:2` build image, which isn't supported by Astro v3.0+. You will need to use the newer `Amazon Linux:2023`.
 
 Build image (Edit build image settings > Build image dropdown):
 ```markdown
-public.ecr.aws/docker/library/node:18.14.1
+Amazon Linux:2023
 ```
 
 ### Static or prerendered pages
@@ -64,8 +57,13 @@ For static dynamic routes, for example, a route of `/blog/[slug].astro`, create 
 
 `/blog/<slug>/ /blog/<slug>/index.html 200 (Rewrite)`
 
+## Features
+
+### Supported
+- image optimization with `<Image>` and `<Picture />` (tentative)
+
 ### Unsupported / Untested
-- image optimization e.g. with `<Image />`
+- hybrid mode
 - middleware
 - base path (and other Astro configuration changes)
 
@@ -117,7 +115,7 @@ applications:
 
 Build image settings:
 ```markdown
-public.ecr.aws/docker/library/node:18.14.1
+Amazon Linux:2023
 ```
 
 ## License

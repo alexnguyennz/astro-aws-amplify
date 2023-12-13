@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig, squooshImageService, passthroughImageService } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import awsAmplify from 'astro-aws-amplify';
@@ -10,3 +10,4 @@ export default defineConfig({
 	output: 'server',
 	adapter: awsAmplify(),
 });
+
