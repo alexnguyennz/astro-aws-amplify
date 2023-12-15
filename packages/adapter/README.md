@@ -35,11 +35,11 @@ export default defineConfig({
 Only `output: server` is currently supported. For fully static sites, remove `adapter` and `output` (or use `output: static`), and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
 
 ### AWS Amplify
-AWS Amplify uses Node.js 16 with its default `Amazon Linux:2` build image, which isn't supported by Astro v3.0+. You will need to use the newer `Amazon Linux:2023`.
+AWS Amplify uses Node.js 16 with its default `Amazon Linux:2` build image, which isn't supported by Astro v3.0+. You can use the newer `Amazon Linux:2023` by adding an environment variable of:
 
-Build image (Edit build image settings > Build image dropdown):
+Environment variable:
 ```markdown
-Amazon Linux:2023
+_CUSTOM_IMAGE=amplify:al2023
 ```
 
 ### Static or prerendered pages
@@ -93,7 +93,7 @@ AWS Amplify build specification (preset in `amplify.yml`):
 ```yaml
 version: 1
 applications:
-  - appRoot: demo
+  - appRoot: demos/blog # change accordingly
     frontend:
       phases:
         preBuild:
@@ -113,9 +113,9 @@ applications:
           - .pnpm-store/**/*
 ```
 
-Build image settings:
+Environment variable (to use newer image):
 ```markdown
-Amazon Linux:2023
+_CUSTOM_IMAGE=amplify:al2023
 ```
 
 ## License
