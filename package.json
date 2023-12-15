@@ -1,7 +1,7 @@
 {
   "name": "astro-aws-amplify",
   "scripts": {
-    "dev": "pnpm --filter demo dev",
-    "build": "pnpm --filter demo build"
+    "dev": "pnpm --filter blog-base-path dev",
+    "build": "pnpm --filter blog-base-path build"
   }
 }
