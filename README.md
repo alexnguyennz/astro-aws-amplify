@@ -11,7 +11,7 @@ Experimental Astro adapter for hosting Astro v4.0 sites on AWS Amplify with SSR.
 ```sh
 # Using NPM
 npm install astro-aws-amplify
-# Using Yarn 
+# Using Yarn
 yarn add astro-aws-amplify
 # Using PNPM
 pnpm add astro-aws-amplify
@@ -35,14 +35,17 @@ export default defineConfig({
 Only `output: server` is currently supported. For fully static sites, remove `adapter` and `output` (or use `output: static`), and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
 
 ### AWS Amplify
-AWS Amplify uses Node.js 16 with its default `Amazon Linux:2` build image, which isn't supported by Astro v3.0+. You will need to use the newer `Amazon Linux:2023`.
 
-Build image (Edit build image settings > Build image dropdown):
+AWS Amplify uses Node.js 16 with its default `Amazon Linux:2` build image, which isn't supported by Astro v3.0+. You can use the newer `Amazon Linux:2023` by adding an environment variable of:
+
+Environment variable:
+
 ```markdown
-Amazon Linux:2023
+_CUSTOM_IMAGE=amplify:al2023
 ```
 
 ### Static or prerendered pages
+
 All pages must be server-rendered by default - you can't use `export const prerender = true` on any pages. As a workaround for static pages however, you can set a manual Amplify rewrite for every static route.
 
 For example, if you have a static `/about` page, create a rewrite of:
@@ -60,9 +63,11 @@ For static dynamic routes, for example, a route of `/blog/[slug].astro`, create 
 ## Features
 
 ### Supported
+
 - image optimization with `<Image>` and `<Picture />` (tentative)
 
 ### Unsupported / Untested
+
 - hybrid mode
 - middleware
 - base path (and other Astro configuration changes)
@@ -83,6 +88,7 @@ pnpm build
 ```
 
 ### AWS Amplify Deployment
+
 Tick "Connecting a monorepo? Pick a folder." and enter:
 
 ```shell
@@ -90,10 +96,11 @@ demo
 ```
 
 AWS Amplify build specification (preset in `amplify.yml`):
+
 ```yaml
 version: 1
 applications:
-  - appRoot: demo
+  - appRoot: demos/blog # change accordingly
     frontend:
       phases:
         preBuild:
@@ -107,18 +114,20 @@ applications:
       artifacts:
         baseDirectory: .amplify-hosting
         files:
-          - '**/*'
+          - "**/*"
       cache:
         paths:
           - .pnpm-store/**/*
 ```
 
-Build image settings:
+Environment variable (to use newer image):
+
 ```markdown
-Amazon Linux:2023
+\_CUSTOM_IMAGE=amplify:al2023
 ```
 
 ## License
+
 MIT
 
 ## Acknowledgements

@@ -1,7 +1,30 @@
 {
-  "name": "astro-aws-amplify",
+  "name": "astro-aws-amplify-root",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexnguyennz/astro-aws-amplify.git"
+  },
   "scripts": {
-    "dev": "pnpm --filter demo dev",
-    "build": "pnpm --filter demo build"
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx,.astro .",
+    "format": "prettier -w \"**/*\" --ignore-unknown --cache"
+  },
+  "engines": {
+    "node": ">=18.14.1",
+    "pnpm": ">=8.6.10"
+  },
+  "packageManager": "pnpm@8.6.10",
+  "devDependencies": {
+    "@typescript-eslint/parser": "^6.14.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-astro": "^0.31.0",
+    "prettier": "^3.1.1",
+    "prettier-plugin-astro": "^0.12.2",
+    "turbo": "^1.11.2"
   }
 }

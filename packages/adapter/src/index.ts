@@ -1,8 +1,8 @@
-import type { AstroConfig, AstroIntegration} from 'astro';
+import type { AstroConfig, AstroIntegration } from "astro";
 
-import { writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { writeFile } from "node:fs/promises";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 export default function amplify(): AstroIntegration {
   let _config: AstroConfig;
@@ -10,24 +10,24 @@ export default function amplify(): AstroIntegration {
   return {
     name: "astro-amplify",
     hooks: {
-      'astro:config:setup': ({ config, updateConfig }) => {
+      "astro:config:setup": ({ config, updateConfig }) => {
         updateConfig({
           build: {
-            client: new URL('./.amplify-hosting/static/', config.root),
-            server: new URL('./.amplify-hosting/compute/default/', config.root),
+            client: new URL("./.amplify-hosting/static/", config.root),
+            server: new URL("./.amplify-hosting/compute/default/", config.root),
           },
         });
       },
-      'astro:config:done': ({ config, setAdapter }) => {
+      "astro:config:done": ({ config, setAdapter }) => {
         setAdapter({
-          name: 'astro-aws-amplify',
-          serverEntrypoint: 'astro-aws-amplify/server',
+          name: "astro-aws-amplify",
+          serverEntrypoint: "astro-aws-amplify/server",
           supportedAstroFeatures: {
-            hybridOutput: 'unsupported',
-            staticOutput: 'unsupported',
-            serverOutput: 'stable',
+            hybridOutput: "unsupported",
+            staticOutput: "unsupported",
+            serverOutput: "stable",
             assets: {
-              supportKind: 'stable',
+              supportKind: "stable",
               isSharpCompatible: true,
               isSquooshCompatible: true,
             },
@@ -43,44 +43,50 @@ export default function amplify(): AstroIntegration {
 
         _config = config;
       },
-      'astro:build:done': async () => {
+      "astro:build:done": async () => {
         const deployManifestConfig = {
-          "version": 1,
-          "routes": [
+          version: 1,
+          routes: [
             {
-              "path": "/*",
-              "target": {
-                "kind": "Compute",
-                "src": "default"
+              path: `${_config.base}*.*`,
+              target: {
+                kind: "Static",
               },
-              "fallback": {
-                "kind": "Static"
-              }
+              fallback: {
+                kind: "Compute",
+                src: "default",
+              },
             },
             {
-              "path": "/*.*",
-              "target": {
-                "kind": "Static"
+              path: "/*",
+              target: {
+                kind: "Compute",
+                src: "default",
               },
             },
           ],
-          "computeResources": [
+          computeResources: [
             {
-              "name": "default",
-              "entrypoint": "entry.mjs",
-              "runtime": "nodejs18.x"
-            }
+              name: "default",
+              entrypoint: "entry.mjs",
+              runtime: "nodejs18.x",
+            },
           ],
-          "framework": {
-            "name": "astro",
-            "version": "4.0.3"
-          }
-        }
+          framework: {
+            name: "astro",
+            version: "4.0.0",
+          },
+        };
 
-        const functionsConfigPath = join(fileURLToPath(_config.root), '/.amplify-hosting/deploy-manifest.json');
-        await writeFile(functionsConfigPath, JSON.stringify(deployManifestConfig));
+        const functionsConfigPath = join(
+          fileURLToPath(_config.root),
+          "/.amplify-hosting/deploy-manifest.json",
+        );
+        await writeFile(
+          functionsConfigPath,
+          JSON.stringify(deployManifestConfig),
+        );
       },
     },
   };
 }
-
