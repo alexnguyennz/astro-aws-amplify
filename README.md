@@ -41,7 +41,7 @@ AWS Amplify uses Node.js 16 with its default `Amazon Linux:2` build image, which
 Environment variable:
 
 ```markdown
-\_CUSTOM_IMAGE=amplify:al2023
+_CUSTOM_IMAGE=amplify:al2023
 ```
 
 ### Static or prerendered pages

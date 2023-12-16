@@ -123,7 +123,7 @@ applications:
 Environment variable (to use newer image):
 
 ```markdown
-\_CUSTOM_IMAGE=amplify:al2023
+_CUSTOM_IMAGE=amplify:al2023
 ```
 
 ## License
