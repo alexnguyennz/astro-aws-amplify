@@ -11,7 +11,9 @@
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx,.astro .",
-    "format": "prettier -w \"**/*\" --ignore-unknown --cache"
+    "format": "prettier -w \"**/*\" --ignore-unknown --cache",
+    "changeset": "changeset",
+    "release": "turbo run build --filter=adapter && changeset publish"
   },
   "engines": {
     "node": ">=18.14.1",
@@ -19,6 +21,7 @@
   },
   "packageManager": "pnpm@8.6.10",
   "devDependencies": {
+    "@changesets/cli": "^2.27.1",
     "@typescript-eslint/parser": "^6.14.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
