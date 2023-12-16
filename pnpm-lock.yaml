@@ -54,7 +54,7 @@ importers:
         specifier: 0.32.6
         version: 0.32.6
 
-  demos/blog-base-path:
+  demos/blogbasepath:
     dependencies:
       '@astrojs/check':
         specifier: ^0.3.1
