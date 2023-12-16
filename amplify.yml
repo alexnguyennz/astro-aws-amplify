@@ -14,7 +14,7 @@ applications:
       artifacts:
         baseDirectory: .amplify-hosting
         files:
-          - '**/*'
+          - "**/*"
       cache:
         paths:
           - .pnpm-store/**/*
