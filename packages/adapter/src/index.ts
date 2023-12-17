@@ -13,7 +13,10 @@ export default function amplify(): AstroIntegration {
       "astro:config:setup": ({ config, updateConfig }) => {
         updateConfig({
           build: {
-            client: new URL("./.amplify-hosting/static/", config.root),
+            client: new URL(
+              `./.amplify-hosting/static${config.base}`,
+              config.root,
+            ),
             server: new URL("./.amplify-hosting/compute/default/", config.root),
           },
         });
