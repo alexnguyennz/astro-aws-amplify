@@ -33,7 +33,7 @@ importers:
         specifier: ^1.11.2
         version: 1.11.2
 
-  demos/base-path:
+  demos/basepath:
     dependencies:
       '@astrojs/check':
         specifier: ^0.3.1
