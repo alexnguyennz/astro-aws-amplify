@@ -60,6 +60,10 @@ For static dynamic routes, for example, a route of `/blog/[slug].astro`, create 
 
 `/blog/<slug>/ /blog/<slug>/index.html 200 (Rewrite)`
 
+For base path routes, create a rewrite of:
+
+`/base/about/ /base/about/index.html 200 (Rewrite)`
+
 ## Features
 
 ### Supported
