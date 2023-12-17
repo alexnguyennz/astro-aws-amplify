@@ -1,0 +1,13 @@
+---
+import { getEntry } from "astro:content";
+import BlogPost from "../../layouts/BlogPost.astro";
+
+const { slug } = Astro.params;
+const post = await getEntry("blog", slug);
+
+const { Content } = await post.render();
+---
+
+<BlogPost {...post.data}>
+  <Content />
+</BlogPost>

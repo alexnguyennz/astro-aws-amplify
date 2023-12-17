@@ -69,12 +69,15 @@ For base path routes, create a rewrite of:
 ### Supported
 
 - image optimization with `<Image>` and `<Picture />` (tentative)
+- base paths
 
 ### Unsupported / Untested
 
+- prerendered pages (without workaround above)
+- remote images
 - hybrid mode
 - middleware
-- base path (and other Astro configuration changes)
+- ???
 
 ## Monorepo Project Setup
 

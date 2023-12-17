@@ -7,6 +7,7 @@ import awsAmplify from "astro-aws-amplify";
 export default defineConfig({
   site: "https://example.com",
   trailingSlash: "always",
+  base: "/base",
   integrations: [mdx(), sitemap()],
   output: "server",
   adapter: awsAmplify(),

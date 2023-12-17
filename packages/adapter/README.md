@@ -41,7 +41,7 @@ AWS Amplify uses Node.js 16 with its default `Amazon Linux:2` build image, which
 Environment variable:
 
 ```markdown
-\_CUSTOM_IMAGE=amplify:al2023
+_CUSTOM_IMAGE=amplify:al2023
 ```
 
 ### Static or prerendered pages
@@ -60,17 +60,24 @@ For static dynamic routes, for example, a route of `/blog/[slug].astro`, create 
 
 `/blog/<slug>/ /blog/<slug>/index.html 200 (Rewrite)`
 
+For base path routes, create a rewrite of:
+
+`/base/about/ /base/about/index.html 200 (Rewrite)`
+
 ## Features
 
 ### Supported
 
 - image optimization with `<Image>` and `<Picture />` (tentative)
+- base paths
 
 ### Unsupported / Untested
 
+- prerendered pages (without workaround above)
+- remote images
 - hybrid mode
 - middleware
-- base path (and other Astro configuration changes)
+- ???
 
 ## Monorepo Project Setup
 
@@ -123,7 +130,7 @@ applications:
 Environment variable (to use newer image):
 
 ```markdown
-_CUSTOM_IMAGE=amplify:al2023
+\_CUSTOM_IMAGE=amplify:al2023
 ```
 
 ## License
