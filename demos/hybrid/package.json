@@ -1,0 +1,22 @@
+{
+  "name": "hybrid",
+  "type": "module",
+  "private": true,
+  "version": "0.0.2",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.3.1",
+    "@astrojs/mdx": "^2.0.0",
+    "@astrojs/rss": "^4.0.1",
+    "@astrojs/sitemap": "^3.0.3",
+    "astro": "^4.0.3",
+    "astro-aws-amplify": "workspace:*",
+    "sharp": "0.32.6"
+  }
+}

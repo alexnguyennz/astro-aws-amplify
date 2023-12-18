@@ -84,6 +84,30 @@ importers:
         specifier: 0.32.6
         version: 0.32.6
 
+  demos/hybrid:
+    dependencies:
+      '@astrojs/check':
+        specifier: ^0.3.1
+        version: 0.3.3(prettier-plugin-astro@0.12.2)(prettier@3.1.1)(typescript@5.3.3)
+      '@astrojs/mdx':
+        specifier: ^2.0.0
+        version: 2.0.1(astro@4.0.6)
+      '@astrojs/rss':
+        specifier: ^4.0.1
+        version: 4.0.1
+      '@astrojs/sitemap':
+        specifier: ^3.0.3
+        version: 3.0.3
+      astro:
+        specifier: ^4.0.3
+        version: 4.0.6(@types/node@20.10.4)(typescript@5.3.3)
+      astro-aws-amplify:
+        specifier: workspace:*
+        version: link:../../packages/adapter
+      sharp:
+        specifier: 0.32.6
+        version: 0.32.6
+
   packages/adapter:
     dependencies:
       astro:

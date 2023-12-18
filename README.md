@@ -32,7 +32,7 @@ export default defineConfig({
 
 ### Astro
 
-Only `output: server` is currently supported. For fully static sites, remove `adapter` and `output` (or use `output: static`), and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
+Only `output: server` is currently supported. For static sites, remove `adapter` and `output` (or use `output: static`), and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify) - you can deploy the `dist` folder directly to Amplify with no extra setup required.
 
 ### AWS Amplify
 
