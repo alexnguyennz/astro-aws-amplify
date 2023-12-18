@@ -1,6 +1,6 @@
 version: 1
 applications:
-  - appRoot: demos/blog
+  - appRoot: demos/hybrid
     frontend:
       phases:
         preBuild:
