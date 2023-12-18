@@ -23,7 +23,7 @@ import { defineConfig } from 'astro/config';
 + import awsAmplify from 'astro-aws-amplify';
 
 export default defineConfig({
-+ output: 'server',
++ output: 'server', // or output: 'hybrid'
 + adapter: awsAmplify()
 })
 ```
@@ -32,7 +32,7 @@ export default defineConfig({
 
 ### Astro
 
-Only `output: server` is currently supported. For fully static sites, remove `adapter` and `output` (or use `output: static`), and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
+Server and hybrid modes are supported. For static sites, remove `adapter` and `output` (or use `output: static`) from your Astro config, and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify). You can deploy the `dist` folder directly to Amplify with no extra setup required.
 
 ### AWS Amplify
 
@@ -67,15 +67,14 @@ For base path routes, create a rewrite of:
 ## Features
 
 ### Supported
-
+- server and hybrid mode
 - image optimization with `<Image>` and `<Picture />` (tentative)
 - base paths
 
 ### Unsupported / Untested
 
-- prerendered pages (without workaround above)
+- pre-rendered pages (without workaround above)
 - remote images
-- hybrid mode
 - middleware
 - ???
 
@@ -99,10 +98,10 @@ pnpm build
 Tick "Connecting a monorepo? Pick a folder." and enter:
 
 ```shell
-demo
+demos/blog
 ```
 
-AWS Amplify build specification (preset in `amplify.yml`):
+AWS Amplify build specification:
 
 ```yaml
 version: 1
@@ -130,7 +129,7 @@ applications:
 Environment variable (to use newer image):
 
 ```markdown
-\_CUSTOM_IMAGE=amplify:al2023
+_CUSTOM_IMAGE=amplify:al2023
 ```
 
 ## License

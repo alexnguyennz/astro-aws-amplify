@@ -1,4 +1,4 @@
-# base-path
+# hybrid
 
 ## 0.0.3
 

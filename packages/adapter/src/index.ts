@@ -26,9 +26,9 @@ export default function amplify(): AstroIntegration {
           name: "astro-aws-amplify",
           serverEntrypoint: "astro-aws-amplify/server",
           supportedAstroFeatures: {
-            hybridOutput: "unsupported",
-            staticOutput: "unsupported",
             serverOutput: "stable",
+            hybridOutput: "stable",
+            staticOutput: "unsupported",
             assets: {
               supportKind: "stable",
               isSharpCompatible: true,
