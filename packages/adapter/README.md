@@ -136,12 +136,11 @@ For base path routes, create a rewrite of:
 - server and hybrid mode
 - image optimization with `<Image>` and `<Picture />` (tentative)
 - base paths
+- middleware
 
 ### Unsupported / Untested
-
 - pre-rendered pages (without workaround above)
 - remote images
-- middleware
 - ???
 
 ## Monorepo Project Setup

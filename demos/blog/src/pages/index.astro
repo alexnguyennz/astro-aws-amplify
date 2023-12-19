@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
@@ -27,6 +29,13 @@ console.log("data", locals);
       <h2>Random fact: {data.text}</h2>
 
       <h3>{locals.title}</h3>
+
+      <Image
+        src="https://picsum.photos/200/300"
+        width="200"
+        height="200"
+        alt=""
+      />
 
       <p>
         Welcome to the official <a href="https://astro.build/">Astro</a> blog
