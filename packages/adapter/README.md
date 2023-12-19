@@ -140,7 +140,6 @@ For base path routes, create a rewrite of:
 
 ### Unsupported / Untested
 - pre-rendered pages (without workaround above)
-- remote images
 - ???
 
 ## Monorepo Project Setup
