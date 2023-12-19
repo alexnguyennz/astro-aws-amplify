@@ -44,6 +44,72 @@ Environment variable:
 _CUSTOM_IMAGE=amplify:al2023
 ```
 
+#### Build specifications
+
+##### npm
+```yaml
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - npm run build
+        - mv node_modules ./.amplify-hosting/compute/default
+  artifacts:
+    baseDirectory: .amplify-hosting
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+```
+
+##### pnpm
+```yaml
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm i -g pnpm
+        - pnpm config set store-dir .pnpm-store
+        - pnpm i
+    build:
+      commands:
+        - pnpm run build
+  artifacts:
+    baseDirectory: .amplify-hosting
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .pnpm-store/**/*
+```
+
+##### Yarn
+```yaml
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - yarn install
+    build:
+      commands:
+        - yarn run build
+        - mv node_modules ./.amplify-hosting/compute/default
+  artifacts:
+    baseDirectory: .amplify-hosting
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+```
+
 ### Static or prerendered pages
 
 All pages must be server-rendered by default - you can't use `export const prerender = true` on any pages. As a workaround for static pages however, you can set a manual Amplify rewrite for every static route.
