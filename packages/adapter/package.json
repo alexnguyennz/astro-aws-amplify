@@ -1,6 +1,6 @@
 {
   "name": "astro-aws-amplify",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": false,
   "description": "Deploy Astro to AWS Amplify (SSR)",
   "keywords": [
@@ -24,16 +24,11 @@
     "./server": "./src/server.ts"
   },
   "peerDependencies": {
-    "astro": "^4.0.3"
+    "@astrojs/node": "^7.0.1",
+    "astro": "^4.0.0"
   },
   "dependencies": {
-    "astro": "^4.0.3",
-    "send": "^0.18.0",
-    "server-destroy": "^1.0.1"
-  },
-  "devDependencies": {
-    "@types/node": "^20.10.0",
-    "@types/send": "^0.17.4",
-    "@types/server-destroy": "^1.0.3"
+    "@astrojs/node": "^7.0.1",
+    "astro": "^4.0.0"
   }
 }
