@@ -1,7 +1,8 @@
 import type { SSRManifest } from "astro";
 import { NodeApp, applyPolyfills } from "astro/app/node";
-import startServer from "./node/standalone.ts";
-import type { Options } from "./node/types.ts";
+
+import startServer from "@astrojs/node/standalone.js";
+import type { Options } from "@astrojs/node/types.js";
 
 applyPolyfills();
 export function createExports(manifest: SSRManifest, options: Options) {
