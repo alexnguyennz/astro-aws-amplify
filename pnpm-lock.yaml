@@ -4,11 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-patchedDependencies:
-  '@astrojs/node@7.0.1':
-    hash: s3w3hsywkrmo3eyuq6qs4elpsu
-    path: patches/@astrojs__node@7.0.1.patch
-
 importers:
 
   .:
@@ -115,12 +110,12 @@ importers:
 
   packages/adapter:
     dependencies:
-      '@astrojs/node':
-        specifier: ^7.0.1
-        version: 7.0.1(patch_hash=s3w3hsywkrmo3eyuq6qs4elpsu)(astro@4.0.6)
       astro:
         specifier: ^4.0.0
         version: 4.0.6(typescript@5.3.3)
+      astrojs-node-aws-amplify:
+        specifier: ^7.0.1
+        version: 7.0.1(astro@4.0.6)
 
 packages:
 
@@ -246,19 +241,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
-
-  /@astrojs/node@7.0.1(patch_hash=s3w3hsywkrmo3eyuq6qs4elpsu)(astro@4.0.6):
-    resolution: {integrity: sha512-jzO5q1t/cwDZQHcPG0CakjPY0SC44kbGgDDoh4UurvzZcCDYQKLz6zzJVqzUiOtDhfSwVrgHoiKo2tNbXASlRQ==}
-    peerDependencies:
-      astro: ^4.0.0
-    dependencies:
-      astro: 4.0.6(typescript@5.3.3)
-      send: 0.18.0
-      server-destroy: 1.0.1
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-    patched: true
 
   /@astrojs/prism@3.0.0:
     resolution: {integrity: sha512-g61lZupWq1bYbcBnYZqdjndShr/J3l/oFobBKPA3+qMat146zce3nz2kdO4giGbhYDt4gYdhmoBz0vZJ4sIurQ==}
@@ -1719,6 +1701,18 @@ packages:
       '@astrojs/compiler': 2.3.4
       synckit: 0.8.6
     dev: true
+
+  /astrojs-node-aws-amplify@7.0.1(astro@4.0.6):
+    resolution: {integrity: sha512-Ay3FEx6ZQKiyFzp7Yln0fKRFy8OjrBlkk3PdjSNuGS82d2dww3C2DGv3c/YW+FWbNCFlk6lGD6BF1Sc368Vfyw==}
+    peerDependencies:
+      astro: ^4.0.0
+    dependencies:
+      astro: 4.0.6(typescript@5.3.3)
+      send: 0.18.0
+      server-destroy: 1.0.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /available-typed-arrays@1.0.5:
     resolution: {integrity: sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==}
