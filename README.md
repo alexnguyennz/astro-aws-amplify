@@ -130,6 +130,10 @@ For base path routes, create a rewrite of:
 
 `/base/about/ /base/about/index.html 200 (Rewrite)`
 
+### 404 Pages
+
+
+
 ## Features
 
 ### Supported
