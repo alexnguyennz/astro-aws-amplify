@@ -51,20 +51,19 @@ export default function amplify(): AstroIntegration {
           version: 1,
           routes: [
             {
-              path: `${_config.base}*.*`,
-              target: {
-                kind: "Static",
-              },
-              fallback: {
-                kind: "Compute",
-                src: "default",
-              },
-            },
-            {
               path: "/*",
               target: {
                 kind: "Compute",
                 src: "default",
+              },
+              fallback: {
+                kind: "Static",
+              },
+            },
+            {
+              path: `${_config.base}*.*`,
+              target: {
+                kind: "Static",
               },
             },
           ],
