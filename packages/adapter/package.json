@@ -1,6 +1,6 @@
 {
   "name": "astro-aws-amplify",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": false,
   "description": "Deploy Astro to AWS Amplify (SSR)",
   "keywords": [

@@ -1,5 +1,12 @@
 # base-path
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [[`f719462`](https://github.com/alexnguyennz/astro-aws-amplify/commit/f71946256dd1b62896bd49458eb9860f2da9ac94), [`22731af`](https://github.com/alexnguyennz/astro-aws-amplify/commit/22731af0794e054be7e55680f1bfe8d1c7dde7e0)]:
+  - astro-aws-amplify@0.0.7
+
 ## 0.0.3
 
 ### Patch Changes
