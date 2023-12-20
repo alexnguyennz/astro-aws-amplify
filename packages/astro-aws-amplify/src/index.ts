@@ -81,17 +81,6 @@ export default function amplify(): AstroIntegration {
               },
             },
           ],
-          computeResources: [
-            {
-              name: "default",
-              entrypoint: "entry.mjs",
-              runtime: "nodejs18.x",
-            },
-          ],
-          framework: {
-            name: "astro",
-            version: "4.0.0",
-          },
           imageSettings: {
             sizes: [100, 200],
             domains: ["example.com"],
@@ -106,6 +95,17 @@ export default function amplify(): AstroIntegration {
             formats: ["image/webp"],
             minumumCacheTTL: 60,
             dangerouslyAllowSVG: false,
+          },
+          computeResources: [
+            {
+              name: "default",
+              entrypoint: "entry.mjs",
+              runtime: "nodejs18.x",
+            },
+          ],
+          framework: {
+            name: "astro",
+            version: "4.0.0",
           },
         };
 
