@@ -51,6 +51,12 @@ export default function amplify(): AstroIntegration {
           version: 1,
           routes: [
             {
+              path: `${_config.base}assets/*`,
+              target: {
+                kind: "Static",
+              },
+            },
+            {
               path: `${_config.base}*.*`,
               target: {
                 kind: "Static",
@@ -65,9 +71,6 @@ export default function amplify(): AstroIntegration {
               target: {
                 kind: "Compute",
                 src: "default",
-              },
-              fallback: {
-                kind: "Static",
               },
             },
           ],
