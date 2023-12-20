@@ -86,10 +86,7 @@ export default function amplify(): AstroIntegration {
             domains: ["example.com"],
             remotePatterns: [
               {
-                protocol: "https",
                 hostname: "example.com",
-                port: "",
-                pathname: "/**",
               },
             ],
             formats: ["image/webp"],
