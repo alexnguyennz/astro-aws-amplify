@@ -12,8 +12,6 @@ const response = await fetch(
 const data = await response.json();
 
 const locals = Astro.locals;
-
-console.log("data", locals);
 ---
 
 <!doctype html>
@@ -36,6 +34,8 @@ console.log("data", locals);
         height="200"
         alt=""
       />
+
+      <img src="/assets/image" alt="static asset with no extension" />
 
       <p>
         Welcome to the official <a href="https://astro.build/">Astro</a> blog

@@ -55,7 +55,7 @@ importers:
         version: 4.0.6(typescript@5.3.3)
       astro-aws-amplify:
         specifier: workspace:*
-        version: link:../../packages/adapter
+        version: link:../../packages/astro-aws-amplify
       sharp:
         specifier: ^0.32.6
         version: 0.32.6
@@ -79,7 +79,7 @@ importers:
         version: 4.0.6(typescript@5.3.3)
       astro-aws-amplify:
         specifier: workspace:*
-        version: link:../../packages/adapter
+        version: link:../../packages/astro-aws-amplify
       sharp:
         specifier: 0.32.6
         version: 0.32.6
@@ -103,12 +103,12 @@ importers:
         version: 4.0.6(typescript@5.3.3)
       astro-aws-amplify:
         specifier: workspace:*
-        version: link:../../packages/adapter
+        version: link:../../packages/astro-aws-amplify
       sharp:
         specifier: 0.32.6
         version: 0.32.6
 
-  packages/adapter:
+  packages/astro-aws-amplify:
     dependencies:
       astro:
         specifier: ^4.0.0

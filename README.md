@@ -112,7 +112,7 @@ frontend:
 
 ### Static or prerendered pages
 
-All pages must be server-rendered by default - you can't use `export const prerender = true` on any pages. As a workaround for static pages however, you can set a manual Amplify rewrite for every static route.
+To use static pre-rendered pages (e.g. with `export const prerender = true` for `server`, or by default for `hybrid`), you will need to create an Amplify rewrite for every static route.
 
 For example, if you have a static `/about` page, create a rewrite of:
 
@@ -130,16 +130,24 @@ For base path routes, create a rewrite of:
 
 `/base/about/ /base/about/index.html 200 (Rewrite)`
 
+### Static files without extensions
+Due to limitations with Amplify routing, if you want to serve static files without extensions (from the `public` folder), place them in a folder called `assets` (`/public/assets/`) and reference them in any pages or components with `/assets/filename`. 
+
+Any other static files with extensions can be placed anywhere in `public`.
+
+### 404 Pages
+Due to limitations with Amplify routing, custom 404 pages (e.g. `404.astro`) need to be SSRed (not prerendered) to work.
+
 ## Features
 
 ### Supported
 - server and hybrid mode
-- image optimization with `<Image>` and `<Picture />` (tentative)
+- image optimization with `<Image>` and `<Picture />`
 - base paths
 - middleware
 
 ### Unsupported / Untested
-- pre-rendered pages (without workaround above)
+- Amplify Image optimization
 - ???
 
 ## Monorepo Project Setup
@@ -170,7 +178,8 @@ AWS Amplify build specification:
 ```yaml
 version: 1
 applications:
-  - appRoot: demos/blog # change accordingly
+  # if you want to deploy another demo or change the configuration, you will need to change `amplify.yml` - changing the build spec won't override this file
+  - appRoot: demos/blog
     frontend:
       phases:
         preBuild:
