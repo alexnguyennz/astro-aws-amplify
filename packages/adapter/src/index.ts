@@ -61,7 +61,7 @@ export default function amplify(): AstroIntegration {
               },
             },
             {
-              path: `${_config.base}*.*`,
+              //path: `${_config.base}*.*`,
               target: {
                 kind: "Static",
               },
