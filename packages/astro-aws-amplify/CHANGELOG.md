@@ -1,5 +1,11 @@
 # astro-aws-amplify
 
+## 0.0.9
+
+### Patch Changes
+
+- Added routing for extensionless static files
+
 ## 0.0.8
 
 ### Patch Changes

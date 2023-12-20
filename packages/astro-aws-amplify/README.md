@@ -130,6 +130,14 @@ For base path routes, create a rewrite of:
 
 `/base/about/ /base/about/index.html 200 (Rewrite)`
 
+### Static files without extensions
+Due to limitations with Amplify routing, if you want to serve static files without extensions (from the `public` folder), place them in a folder called `assets` (`/public/assets/`) and reference them in any pages or components with `/assets/filename`.
+
+Any other static files with extensions can be placed anywhere in `public`.
+
+### 404 Pages
+Due to limitations with Amplify routing, custom 404 pages (e.g. `404.astro`) need to be SSRed (not prerendered) to work.
+
 ## Features
 
 ### Supported
