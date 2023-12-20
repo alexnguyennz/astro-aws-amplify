@@ -92,7 +92,7 @@ export default function amplify(): AstroIntegration {
             name: "astro",
             version: "4.0.0",
           },
-          imageSettings: {
+          imageSettingsTest: {
             sizes: [100, 200],
             domains: [],
             remotePatterns: [],
