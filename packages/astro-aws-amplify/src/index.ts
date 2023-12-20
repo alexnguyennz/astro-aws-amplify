@@ -92,10 +92,17 @@ export default function amplify(): AstroIntegration {
             name: "astro",
             version: "4.0.0",
           },
-          imageSettingsTest: {
+          imageSettings: {
             sizes: [100, 200],
-            domains: [],
-            remotePatterns: [],
+            domains: ["example.com"],
+            remotePatterns: [
+              {
+                protocol: "https",
+                hostname: "example.com",
+                port: "",
+                pathname: "/**",
+              },
+            ],
             formats: ["image/webp"],
             minumumCacheTTL: 60,
             dangerouslyAllowSVG: false,
