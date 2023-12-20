@@ -51,7 +51,7 @@ export default function amplify(): AstroIntegration {
           version: 1,
           routes: [
             {
-              path: "/amplify/image/*",
+              path: "/images/*",
               target: {
                 kind: "ImageOptimization",
                 cacheControl: "public, max-age=31536000, immutable",
@@ -86,7 +86,10 @@ export default function amplify(): AstroIntegration {
             domains: ["example.com"],
             remotePatterns: [
               {
+                protocol: "https",
                 hostname: "example.com",
+                port: "",
+                pathname: "/**",
               },
             ],
             formats: ["image/webp"],
