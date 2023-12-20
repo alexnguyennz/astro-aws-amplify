@@ -51,6 +51,13 @@ export default function amplify(): AstroIntegration {
           version: 1,
           routes: [
             {
+              path: "/amplify/image/*",
+              target: {
+                kind: "ImageOptimization",
+                cacheControl: "public, max-age=31536000, immutable",
+              },
+            },
+            {
               path: `${_config.base}assets/*`,
               target: {
                 kind: "Static",
@@ -84,6 +91,14 @@ export default function amplify(): AstroIntegration {
           framework: {
             name: "astro",
             version: "4.0.0",
+          },
+          imageSettings: {
+            sizes: [100, 200],
+            domains: [],
+            remotePatterns: [],
+            formats: ["image/webp"],
+            minumumCacheTTL: 60,
+            dangerouslyAllowSVG: false,
           },
         };
 
