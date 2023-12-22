@@ -50,13 +50,13 @@ export default function amplify(): AstroIntegration {
         const deployManifestConfig = {
           version: 1,
           routes: [
-            {
-              path: "/images/*",
+            /*{
+              path: "/images/!*",
               target: {
                 kind: "ImageOptimization",
                 cacheControl: "public, max-age=31536000, immutable",
               },
-            },
+            },*/
             {
               path: `${_config.base}assets/*`,
               target: {
@@ -81,7 +81,7 @@ export default function amplify(): AstroIntegration {
               },
             },
           ],
-          imageSettings: {
+          /*imageSettings: {
             sizes: [100, 200],
             domains: ["example.com"],
             remotePatterns: [
@@ -89,13 +89,13 @@ export default function amplify(): AstroIntegration {
                 protocol: "https",
                 hostname: "example.com",
                 port: "",
-                pathname: "/**",
+                pathname: "/!**",
               },
             ],
             formats: ["image/webp"],
             minumumCacheTTL: 60,
             dangerouslyAllowSVG: false,
-          },
+          },*/
           computeResources: [
             {
               name: "default",
