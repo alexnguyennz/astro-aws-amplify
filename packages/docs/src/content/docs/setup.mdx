@@ -1,0 +1,135 @@
+---
+title: Setup
+description: Setup instructions
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Astro AWS Amplify is an Astro adapter for deploying server-side Astro sites on AWS Amplify Hosting.
+
+## Prerequisites
+
+- an Astro site - `v4.x` or higher (may also work on `v3.x` sites)
+
+## Installation
+
+<Tabs>
+  <TabItem label="npm">
+    ```shell
+    npm install astro-aws-amplify
+    ```
+  </TabItem>
+  <TabItem label="pnpm">
+    ```shell
+    pnpm add astro-aws-amplify
+    ```
+  </TabItem>
+  <TabItem label="Yarn">
+    ```shell
+    yarn add astro-aws-amplify
+    ```
+  </TabItem>
+</Tabs>
+
+In your Astro config, add the adapter:
+
+```diff lang="js" title="astro.config.mjs"
+import { defineConfig } from 'astro/config';
++ import awsAmplify from 'astro-aws-amplify';
+
+export default defineConfig({
++ output: 'server', // output: 'hybrid'
++ adapter: awsAmplify()
+})
+```
+
+## Configuration
+
+### Astro
+
+[Server and hybrid modes](https://docs.astro.build/en/guides/server-side-rendering/#enable-on-demand-server-rendering) are supported. For static sites, remove the adapter and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
+
+### AWS Amplify
+
+AWS Amplify Hosting uses Node.js v16 by default which isn't supported.
+
+You can use the newer `Amazon Linux:2023` by adding an environment variable of:
+
+```markdown title="Amplify Environment Variables"
+_CUSTOM_IMAGE=amplify:al2023
+```
+
+#### Build specifications
+
+You can use the following build specifications as-is or customize it to your liking. Moving the `node_modules` folder is required for `npm` and `Yarn` deployments.
+
+<Tabs>
+  <TabItem label="npm">
+    ```yaml
+    version: 1
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - npm ci
+        build:
+          commands:
+            - npm run build
+            - mv node_modules ./.amplify-hosting/compute/default
+      artifacts:
+        baseDirectory: .amplify-hosting
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - node_modules/**/*
+    ```
+  </TabItem>
+  <TabItem label="pnpm">
+    ```yaml
+    version: 1
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - npm i -g pnpm
+            - pnpm config set store-dir .pnpm-store
+            - pnpm i
+        build:
+          commands:
+            - pnpm run build
+      artifacts:
+        baseDirectory: .amplify-hosting
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - .pnpm-store/**/*
+    ```
+  </TabItem>
+  <TabItem label="Yarn">
+    ```yaml
+    version: 1
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - yarn install
+        build:
+          commands:
+            - yarn run build
+            - mv node_modules ./.amplify-hosting/compute/default
+      artifacts:
+        baseDirectory: .amplify-hosting
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - node_modules/**/*
+    ```
+  </TabItem>
+</Tabs>
+
+## Further reading
+
+- [Amplify Hosting SSR deployment specification](https://docs.aws.amazon.com/amplify/latest/userguide/ssr-deployment-specification.html)
+- [Static Astro deployments](https://docs.astro.build/en/guides/deploy/aws/)
