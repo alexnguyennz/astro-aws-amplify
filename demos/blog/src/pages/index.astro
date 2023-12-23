@@ -15,7 +15,10 @@ const locals = Astro.locals;
 
 const API_KEY = import.meta.env.SUPABASE_API_KEY;
 
+const PROCESS_API_KEY = process.env.SUPABASE_API_KEY;
+
 console.log("API KEY", API_KEY);
+console.log("PROCESS API KEY", PROCESS_API_KEY);
 ---
 
 <!doctype html>
@@ -32,7 +35,11 @@ console.log("API KEY", API_KEY);
 
       <h3>{locals.title}</h3>
 
-       Supabase: {API_KEY}
+      <p>Supabase: {API_KEY}</p>
+
+      <p>Supabase (process): {PROCESS_API_KEY}</p>
+
+      <p>Public: {import.meta.env.VITE_PUBLIC}</p>
 
       <Image
         src="https://picsum.photos/200/300"
