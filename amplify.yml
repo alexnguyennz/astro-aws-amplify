@@ -12,6 +12,7 @@ applications:
           commands:
             - echo "SUPABASE_API_KEY=teststaticsupabase" >> .env
             - echo "PUBLIC_ASTRO=teststaticpublic" >> .env
+            - echo "SUPABASE_API_KEY=teststaticsupabase" >> .env
             - pnpm run build
       artifacts:
         baseDirectory: .amplify-hosting
