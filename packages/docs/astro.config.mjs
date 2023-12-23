@@ -3,13 +3,12 @@ import starlight from "@astrojs/starlight";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://astro-aws-amplify.alexnguyen.co.nz",
+  site: "https://astro-aws-amplify.netlify.app",
   integrations: [
     starlight({
       title: "Astro AWS Amplify",
       social: {
         github: "https://github.com/alexnguyennz/astro-aws-amplify",
-        "x.com": "https://twitter.com/anguyendev",
       },
       sidebar: [
         {

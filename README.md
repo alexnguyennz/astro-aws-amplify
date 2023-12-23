@@ -1,12 +1,14 @@
 # astro-aws-amplify
 
-Experimental Astro adapter for hosting Astro v4.0 sites on AWS Amplify with SSR.
+Astro AWS Amplify is an Astro adapter for deploying server-side Astro sites on AWS Amplify Hosting.
 
 [View Demo](https://main.dy0rr16jdndpq.amplifyapp.com/)
 
-## Usage
+## Prerequisites
 
-### Installation
+- an Astro site - `v4.x` or higher (may also work on `v3.x` sites)
+
+## Installation
 
 ```sh
 # Using NPM
@@ -17,13 +19,15 @@ yarn add astro-aws-amplify
 pnpm add astro-aws-amplify
 ```
 
+In your Astro config, add the adapter:
+
 ```diff
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
 + import awsAmplify from 'astro-aws-amplify';
 
 export default defineConfig({
-+ output: 'server', // or output: 'hybrid'
++ output: 'server', // output: 'hybrid'
 + adapter: awsAmplify()
 })
 ```
@@ -32,19 +36,21 @@ export default defineConfig({
 
 ### Astro
 
-Server and hybrid modes are supported. For static sites, remove `adapter` and `output` (or use `output: static`) from your Astro config, and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify). You can deploy the `dist` folder directly to Amplify with no extra setup required.
+[Server and hybrid modes](https://docs.astro.build/en/guides/server-side-rendering/#enable-on-demand-server-rendering) are supported. For static sites, remove the adapter and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
 
 ### AWS Amplify
 
-AWS Amplify uses Node.js 16 with its default `Amazon Linux:2` build image, which isn't supported by Astro v3.0+. You can use the newer `Amazon Linux:2023` by adding an environment variable of:
+AWS Amplify Hosting uses Node.js v16 by default which isn't supported.
 
-Environment variable:
+You can use the newer `Amazon Linux:2023` by adding an environment variable of:
 
 ```markdown
 _CUSTOM_IMAGE=amplify:al2023
 ```
 
 #### Build specifications
+
+You can use the following build specifications as-is or customize it to your liking. Moving the `node_modules` folder is required for `npm` and `Yarn` deployments.
 
 ##### npm
 ```yaml
@@ -110,100 +116,61 @@ frontend:
       - node_modules/**/*
 ```
 
-### Static or prerendered pages
-
-To use static pre-rendered pages (e.g. with `export const prerender = true` for `server`, or by default for `hybrid`), you will need to create an Amplify rewrite for every static route.
-
-For example, if you have a static `/about` page, create a rewrite of:
-
-`/about/ /about/index.html 200 (Rewrite)`
-
-If you don't force [trailing slashes](https://docs.astro.build/en/reference/configuration-reference/#trailingslash) or use page links with trailing slashes, you will need to also add:
-
-`/about /about/index.html 200 (Rewrite)`
-
-For static dynamic routes, for example, a route of `/blog/[slug].astro`, create a rewrite of:
-
-`/blog/<slug>/ /blog/<slug>/index.html 200 (Rewrite)`
-
-For base path routes, create a rewrite of:
-
-`/base/about/ /base/about/index.html 200 (Rewrite)`
-
-### Static files without extensions
-Due to limitations with Amplify routing, if you want to serve static files without extensions (from the `public` folder), place them in a folder called `assets` (`/public/assets/`) and reference them in any pages or components with `/assets/filename`. 
-
-Any other static files with extensions can be placed anywhere in `public`.
-
-### 404 Pages
-Due to limitations with Amplify routing, custom 404 pages (e.g. `404.astro`) need to be SSRed (not prerendered) to work.
-
 ## Features
 
 ### Supported
-- server and hybrid mode
-- image optimization with `<Image>` and `<Picture />`
-- base paths
-- middleware
+- [server and hybrid](https://docs.astro.build/en/guides/server-side-rendering/#enable-on-demand-server-rendering) mode
+- image optimization with [`<Image>`](https://docs.astro.build/en/guides/images/#image--astroassets) and [`<Picture />`](https://docs.astro.build/en/guides/images/#picture-)
+- [base paths](https://docs.astro.build/en/reference/configuration-reference/#base)
+- [middleware](https://docs.astro.build/en/guides/middleware/)
 
-### Unsupported / Untested
-- Amplify Image optimization
+### Unsupported or untested
+- [Amplify Image](https://docs.aws.amazon.com/amplify/latest/userguide/image-optimization.html) optimization
+- [build previews](https://docs.astro.build/en/reference/cli-reference/#astro-preview) (`npm run preview`)
 - ???
 
-## Monorepo Project Setup
+## Limitations
 
-### Installation
+### Static or prerendered pages
 
-```sh
-pnpm install
+Static or prerendered pages (that are defined with `export const prerender = true` or default for hybrid) will need a rewrite rule.
+
+For example, if you have a static `/about` page, create a rewrite of:
+
+```
+/about/ /about/index.html 200 (Rewrite)
 ```
 
-### Run or build demo locally
+If you don't use [trailing slashes](https://docs.astro.build/en/reference/configuration-reference/#trailingslash), you will need to also add:
 
-```shell
-pnpm dev
-pnpm build
+```
+/about /about/index.html 200 (Rewrite)
 ```
 
-### AWS Amplify Deployment
+For static dynamic routes, like a route of `/blog/[slug].astro`, create a rewrite of:
 
-Tick "Connecting a monorepo? Pick a folder." and enter:
-
-```shell
-demos/blog
+```
+/blog/<slug>/ /blog/<slug>/index.html 200 (Rewrite)
 ```
 
-AWS Amplify build specification:
 
-```yaml
-version: 1
-applications:
-  # if you want to deploy another demo or change the configuration, you will need to change `amplify.yml` - changing the build spec won't override this file
-  - appRoot: demos/blog
-    frontend:
-      phases:
-        preBuild:
-          commands:
-            - npm i -g pnpm
-            - pnpm config set store-dir .pnpm-store
-            - pnpm i
-        build:
-          commands:
-            - pnpm run build
-      artifacts:
-        baseDirectory: .amplify-hosting
-        files:
-          - "**/*"
-      cache:
-        paths:
-          - .pnpm-store/**/*
+#### Base path rewrites
+
+```
+/base/about/ /base/about/index.html 200 (Rewrite)
 ```
 
-Environment variable (to use newer image):
+### 404 Pages
+Custom 404 pages (like `404.astro`) need to be server-side rendered (not prerendered) to work. This is a [limitation with Amplify](https://docs.aws.amazon.com/amplify/latest/userguide/ssr-deployment-specification.html#catchall-fallback-routing).
 
-```markdown
-_CUSTOM_IMAGE=amplify:al2023
+### Static files without extensions
+Due to [limitations with Amplify routing](https://docs.aws.amazon.com/amplify/latest/userguide/ssr-deployment-specification.html#catchall-fallback-routing), to serve `public` files without extensions, place them in a folder called `assets` (`/public/assets/`) and reference them with `/assets/filename`:
+
+```sh title="/public/assets/"
+somefile
 ```
+
+Any other static files with extensions will work as usual.
 
 ## License
 
@@ -211,4 +178,4 @@ MIT
 
 ## Acknowledgements
 
-Uses code from the official [@astrojs/node](https://github.com/withastro/astro/tree/main/packages/integrations/node) adapter to establish a Node.js server required for AWS Amplify SSR environments.
+Uses code from the [@astrojs/node](https://github.com/withastro/astro/tree/main/packages/integrations/node) adapter to establish a Node.js server required for AWS Amplify SSR environments.

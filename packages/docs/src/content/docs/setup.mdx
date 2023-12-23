@@ -4,7 +4,7 @@ description: Setup instructions
 ---
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-Astro AWS Amplify is an experimental Astro adapter for hosting server-side Astro sites on AWS Amplify Hosting.
+Astro AWS Amplify is an Astro adapter for deploying server-side Astro sites on AWS Amplify Hosting.
 
 ## Prerequisites
 
@@ -37,7 +37,7 @@ import { defineConfig } from 'astro/config';
 + import awsAmplify from 'astro-aws-amplify';
 
 export default defineConfig({
-+ output: 'server', // output: 'hybrid',
++ output: 'server', // output: 'hybrid'
 + adapter: awsAmplify()
 })
 ```
@@ -50,8 +50,6 @@ export default defineConfig({
 
 ### AWS Amplify
 
-#### Node.js
-
 AWS Amplify Hosting uses Node.js v16 by default which isn't supported.
 
 You can use the newer `Amazon Linux:2023` by adding an environment variable of:
@@ -62,7 +60,7 @@ _CUSTOM_IMAGE=amplify:al2023
 
 #### Build specifications
 
-You can use the following build specifications as-is or customize it to your liking.
+You can use the following build specifications as-is or customize it to your liking. Moving the `node_modules` folder is required for `npm` and `Yarn` deployments.
 
 <Tabs>
   <TabItem label="npm">
@@ -130,8 +128,6 @@ You can use the following build specifications as-is or customize it to your lik
     ```
   </TabItem>
 </Tabs>
-
-Make sure to check out [Limitations](../limitations/) for known limitations or issues.
 
 ## Further reading
 

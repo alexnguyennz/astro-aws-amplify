@@ -1,4 +1,3 @@
 packages:
   - "demos/*"
   - "packages/*"
-  - "docs"
