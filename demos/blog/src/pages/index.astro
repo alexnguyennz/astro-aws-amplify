@@ -19,6 +19,7 @@ const PROCESS_API_KEY = process.env.SUPABASE_API_KEY;
 
 console.log("API KEY", API_KEY);
 console.log("PROCESS API KEY", PROCESS_API_KEY);
+console.log("PUBLIC", import.meta.env.VITE_PUBLIC);
 ---
 
 <!doctype html>
@@ -40,6 +41,8 @@ console.log("PROCESS API KEY", PROCESS_API_KEY);
       <p>Supabase (process): {PROCESS_API_KEY}</p>
 
       <p>Public: {import.meta.env.VITE_PUBLIC}</p>
+
+      <p>Public Astro: {import.meta.env.PUBLIC_ASTRO}</p>
 
       <Image
         src="https://picsum.photos/200/300"
