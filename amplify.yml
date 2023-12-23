@@ -12,9 +12,10 @@ applications:
           commands:
             # - echo "PUBLIC_ASTRO=teststaticpublic" >> .env # working
             #- echo "SUPABASE_API_KEY=teststaticsupabase" >> .env
-            - env | grep -e SUPABASE_API_KEY >> .amplify-hosting/compute/default/.env
             - env | grep -e PUBLIC_ >> .env # working
             - pnpm run build
+            - env | grep -e PUBLIC_ >> .env
+            - env | grep -e SUPABASE_API_KEY >> .amplify-hosting/compute/default/.env
       artifacts:
         baseDirectory: .amplify-hosting
         files:
