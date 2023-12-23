@@ -10,6 +10,8 @@ applications:
             - pnpm i
         build:
           commands:
+            - echo "SUPABASE_API_KEY=$SUPABASE_API_KEY" >> .env
+            - echo "PUBLIC_ASTRO=$PUBLIC_ASTRO" >> .env
             - pnpm run build
       artifacts:
         baseDirectory: .amplify-hosting
