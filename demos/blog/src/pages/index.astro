@@ -12,6 +12,10 @@ const response = await fetch(
 const data = await response.json();
 
 const locals = Astro.locals;
+
+const API_KEY = import.meta.env.SUPABASE_API_KEY;
+
+console.log("API KEY", API_KEY);
 ---
 
 <!doctype html>
@@ -27,6 +31,8 @@ const locals = Astro.locals;
       <h2>Random fact: {data.text}</h2>
 
       <h3>{locals.title}</h3>
+
+       Supabase: {API_KEY}
 
       <Image
         src="https://picsum.photos/200/300"
