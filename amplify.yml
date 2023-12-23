@@ -14,7 +14,7 @@ applications:
             - echo "PUBLIC_ASTRO=teststaticpublic" >> .env
             - echo "SUPABASE_API_KEY=teststaticsupabase" >> .env
             - echo "SUPABASE_API_KEY=teststaticsupabase" >> .env
-            - pnpm run build:$BUILD_ENV
+            - pnpm run build
             - echo "SUPABASE_API_KEY=teststaticsupabase" >> .env
             - echo "SUPABASE_API_KEY=$SUPABASE_API_KEY" >> .env
       artifacts:
