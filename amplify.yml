@@ -11,11 +11,11 @@ applications:
         build:
           commands:
             #- env | grep -e VITE_ >> .env.production
-            - env | grep -e VITE_API_KEY >> .env
-            - env | grep -e VITE_API_KEY >> .env.production
-            - env | grep -e SUPABASE_ >> .env
-            - env | grep -e SUPABASE_ >> .env.production
-            - env | grep -e SUPABASE_API_KEY >> .env.production # not working
+            #- env | grep -e VITE_API_KEY >> .env
+            #- env | grep -e VITE_API_KEY >> .env.production
+            #- env | grep -e SUPABASE_ >> .env
+            #- env | grep -e SUPABASE_ >> .env.production
+            #- env | grep -e SUPABASE_API_KEY >> .env.production # not working
             #- env | grep -e PUBLIC_ >> .env # working
             - pnpm run build
       artifacts:
