@@ -10,7 +10,7 @@ applications:
             - pnpm i
         build:
           commands:
-            - env | grep -e VITE_ >> .env.production
+            #- env | grep -e VITE_ >> .env.production
             - env | grep -e VITE_API_KEY >> .env
             - env | grep -e VITE_API_KEY >> .env.production
             - env | grep -e SUPABASE_ >> .env
