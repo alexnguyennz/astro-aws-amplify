@@ -16,6 +16,7 @@ applications:
             - env | grep -e SUPABASE_ >> .env
             - env | grep -e SUPABASE_ >> .env.production
             - env | grep -e SUPABASE_API_KEY >> .env.production # not working
+            - env | grep -e SUPABASE_API_KEY >> ./.amplify-hosting/compute/default/.env.production
             - env | grep -e PUBLIC_ >> .env # working
             - pnpm run build
       artifacts:
