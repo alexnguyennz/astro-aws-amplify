@@ -10,7 +10,7 @@ applications:
             - pnpm i
         build:
           commands:
-            - env | grep -e SUPABASE_API_KEY >> .env # working
+            - env | grep -e SUPABASE_API_KEY >> .env # not working
             - env | grep -e PUBLIC_ >> .env # working
             - pnpm run build
       artifacts:

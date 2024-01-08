@@ -15,13 +15,12 @@ const locals = Astro.locals;
 
 const API_KEY = import.meta.env.SUPABASE_API_KEY;
 
-const PROCESS_API_KEY = process.env.SUPABASE_API_KEY;
-
 console.log("API KEY", API_KEY);
-console.log("PROCESS API KEY", PROCESS_API_KEY);
 console.log("PUBLIC", import.meta.env.VITE_PUBLIC);
 
 console.log("ASTRO PUBLIC", import.meta.env.PUBLIC_ASTRO);
+
+console.log("SSR", import.meta.env.SSR);
 ---
 
 <!doctype html>
@@ -39,8 +38,6 @@ console.log("ASTRO PUBLIC", import.meta.env.PUBLIC_ASTRO);
       <h3>{locals.title}</h3>
 
       <p>Supabase: {API_KEY}</p>
-
-      <p>Supabase (process): {PROCESS_API_KEY}</p>
 
       <p>Public: {import.meta.env.VITE_PUBLIC}</p>
 
