@@ -17,8 +17,9 @@ applications:
             #- env | grep -e SUPABASE_ >> .env.production
             # - env | grep -e SUPABASE_API_KEY >> .env # not working
             #- env | grep -e PUBLIC_ >> .env # working
+            - env | grep -e API_KEY >> .env
             - echo SUPABASE_API_KEY=manual >> .env.production
-            - SUPABASE_API_KEY=passed pnpm run build
+            - pnpm run build
       artifacts:
         baseDirectory: .amplify-hosting
         files:
