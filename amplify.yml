@@ -15,7 +15,7 @@ applications:
             #- env | grep -e VITE_API_KEY >> .env.production
             #- env | grep -e SUPABASE_ >> .env
             #- env | grep -e SUPABASE_ >> .env.production
-            - env | grep -e SUPABASE_API_KEY >> .env # not working
+            # - env | grep -e SUPABASE_API_KEY >> .env # not working
             #- env | grep -e PUBLIC_ >> .env # working
             - SUPABASE_API_KEY=passed pnpm run build
       artifacts:
