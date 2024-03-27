@@ -15,17 +15,17 @@ Astro AWS Amplify is an Astro adapter for deploying server-side Astro sites on A
 <Tabs>
   <TabItem label="npm">
     ```shell
-    npm install astro-aws-amplify
+    npm install astro-aws-amplify dotenv
     ```
   </TabItem>
   <TabItem label="pnpm">
     ```shell
-    pnpm add astro-aws-amplify
+    pnpm add astro-aws-amplify dotenv
     ```
   </TabItem>
   <TabItem label="Yarn">
     ```shell
-    yarn add astro-aws-amplify
+    yarn add astro-aws-amplify dotenv
     ```
   </TabItem>
 </Tabs>
@@ -33,6 +33,7 @@ Astro AWS Amplify is an Astro adapter for deploying server-side Astro sites on A
 In your Astro config, add the adapter:
 
 ```diff lang="js" title="astro.config.mjs"
++ import 'dotenv/config'
 import { defineConfig } from 'astro/config';
 + import awsAmplify from 'astro-aws-amplify';
 
@@ -73,8 +74,10 @@ You can use the following build specifications as-is or customize it to your lik
             - npm ci
         build:
           commands:
+            - env >> .env
             - npm run build
             - mv node_modules ./.amplify-hosting/compute/default
+            - mv .env ./.amplify-hosting/compute/default/.env
       artifacts:
         baseDirectory: .amplify-hosting
         files:
@@ -96,7 +99,10 @@ You can use the following build specifications as-is or customize it to your lik
             - pnpm i
         build:
           commands:
+            - env >> .env
             - pnpm run build
+            - mv .env ./.amplify-hosting/compute/default/.env
+    
       artifacts:
         baseDirectory: .amplify-hosting
         files:
@@ -116,8 +122,10 @@ You can use the following build specifications as-is or customize it to your lik
             - yarn install
         build:
           commands:
+            - env >> .env
             - yarn run build
             - mv node_modules ./.amplify-hosting/compute/default
+            - mv .env ./.amplify-hosting/compute/default/.env
       artifacts:
         baseDirectory: .amplify-hosting
         files:
