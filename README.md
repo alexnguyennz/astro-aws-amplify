@@ -62,8 +62,10 @@ frontend:
         - npm ci
     build:
       commands:
+        - env >> .env
         - npm run build
         - mv node_modules ./.amplify-hosting/compute/default
+        - mv .env ./.amplify-hosting/compute/default/.env
   artifacts:
     baseDirectory: .amplify-hosting
     files:
@@ -85,7 +87,10 @@ frontend:
         - pnpm i
     build:
       commands:
+        - env >> .env
         - pnpm run build
+        - mv .env ./.amplify-hosting/compute/default/.env
+
   artifacts:
     baseDirectory: .amplify-hosting
     files:
@@ -105,8 +110,10 @@ frontend:
         - yarn install
     build:
       commands:
+        - env >> .env
         - yarn run build
         - mv node_modules ./.amplify-hosting/compute/default
+        - mv .env ./.amplify-hosting/compute/default/.env
   artifacts:
     baseDirectory: .amplify-hosting
     files:
