@@ -4,11 +4,11 @@ import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export default function amplify(): AstroIntegration {
+export default function awsAmplify(): AstroIntegration {
   let _config: AstroConfig;
 
   return {
-    name: "astro-amplify",
+    name: "astro-aws-amplify",
     hooks: {
       "astro:config:setup": ({ config, updateConfig }) => {
         updateConfig({
