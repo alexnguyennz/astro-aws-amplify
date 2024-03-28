@@ -1,36 +1,32 @@
-import type { AstroConfig, AstroIntegration } from "astro";
+import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { writeFile } from 'node:fs/promises'
+import type { AstroConfig, AstroIntegration } from 'astro'
 
-import { writeFile } from "node:fs/promises";
-import { join } from "node:path";
-import { fileURLToPath } from "node:url";
-
-export default function amplify(): AstroIntegration {
-  let _config: AstroConfig;
-
+export default function awsAmplify(userOptions: { loadEnv?: boolean }): AstroIntegration {
+  let _config: AstroConfig
   return {
-    name: "astro-amplify",
+    name: 'astro-aws-amplify',
     hooks: {
-      "astro:config:setup": ({ config, updateConfig }) => {
+      'astro:config:setup': async ({ config, updateConfig }) => {
         updateConfig({
           build: {
-            client: new URL(
-              `./.amplify-hosting/static${config.base}`,
-              config.root,
-            ),
-            server: new URL("./.amplify-hosting/compute/default/", config.root),
+            client: new URL(`./.amplify-hosting/static${config.base}`, config.root),
+            server: new URL('./.amplify-hosting/compute/default/', config.root),
           },
-        });
+        })
+        if (userOptions?.loadEnv !== false) await import('dotenv/config')
       },
-      "astro:config:done": ({ config, setAdapter }) => {
+      'astro:config:done': ({ config, setAdapter }) => {
         setAdapter({
-          name: "astro-aws-amplify",
-          serverEntrypoint: "astro-aws-amplify/server",
+          name: 'astro-aws-amplify',
+          serverEntrypoint: 'astro-aws-amplify/server',
           supportedAstroFeatures: {
-            serverOutput: "stable",
-            hybridOutput: "stable",
-            staticOutput: "unsupported",
+            serverOutput: 'stable',
+            hybridOutput: 'stable',
+            staticOutput: 'unsupported',
             assets: {
-              supportKind: "stable",
+              supportKind: 'stable',
               isSharpCompatible: true,
               isSquooshCompatible: true,
             },
@@ -42,60 +38,52 @@ export default function amplify(): AstroIntegration {
             port: 3000,
             assets: config.build.assets,
           },
-        });
-
-        _config = config;
+        })
+        _config = config
       },
-      "astro:build:done": async () => {
+      'astro:build:done': async () => {
         const deployManifestConfig = {
           version: 1,
           routes: [
             {
               path: `${_config.base}assets/*`,
               target: {
-                kind: "Static",
+                kind: 'Static',
               },
             },
             {
               path: `${_config.base}*.*`,
               target: {
-                kind: "Static",
+                kind: 'Static',
               },
               fallback: {
-                kind: "Compute",
-                src: "default",
+                kind: 'Compute',
+                src: 'default',
               },
             },
             {
-              path: "/*",
+              path: '/*',
               target: {
-                kind: "Compute",
-                src: "default",
+                kind: 'Compute',
+                src: 'default',
               },
             },
           ],
           computeResources: [
             {
-              name: "default",
-              entrypoint: "entry.mjs",
-              runtime: "nodejs18.x",
+              name: 'default',
+              entrypoint: 'entry.mjs',
+              runtime: 'nodejs18.x',
             },
           ],
           framework: {
-            name: "astro",
-            version: "4.0.0",
+            name: 'astro',
+            version: '4.0.0',
           },
-        };
-
-        const functionsConfigPath = join(
-          fileURLToPath(_config.root),
-          "/.amplify-hosting/deploy-manifest.json",
-        );
-        await writeFile(
-          functionsConfigPath,
-          JSON.stringify(deployManifestConfig),
-        );
+        }
+        const functionsConfigPath = join(fileURLToPath(_config.root), '/.amplify-hosting/deploy-manifest.json')
+        await writeFile(functionsConfigPath, JSON.stringify(deployManifestConfig))
       },
     },
-  };
+  }
 }

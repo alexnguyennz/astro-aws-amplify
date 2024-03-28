@@ -1,6 +1,6 @@
 ---
-import HeaderLink from "./HeaderLink.astro";
-import { SITE_TITLE } from "../consts";
+import HeaderLink from './HeaderLink.astro'
+import { SITE_TITLE } from '../consts'
 ---
 
 <header>
@@ -10,9 +10,7 @@ import { SITE_TITLE } from "../consts";
       <HeaderLink href={`${import.meta.env.BASE_URL}`}>Home</HeaderLink>
       <HeaderLink href={`${import.meta.env.BASE_URL}blog/`}>Blog</HeaderLink>
       <HeaderLink href={`${import.meta.env.BASE_URL}about/`}>About</HeaderLink>
-      <HeaderLink href={`${import.meta.env.BASE_URL}static/`}>
-        Static
-      </HeaderLink>
+      <HeaderLink href={`${import.meta.env.BASE_URL}static/`}>Static</HeaderLink>
     </div>
     <div class="social-links">
       <a href="https://m.webtoo.ls/@astro" target="_blank">
