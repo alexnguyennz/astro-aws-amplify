@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import type { SSRManifest } from 'astro'
 import { NodeApp, applyPolyfills } from 'astro/app/node'
 import startServer from 'astrojs-node-aws-amplify/standalone.js'

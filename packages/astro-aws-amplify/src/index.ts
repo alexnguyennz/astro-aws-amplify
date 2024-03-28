@@ -3,19 +3,18 @@ import { fileURLToPath } from 'node:url'
 import { writeFile } from 'node:fs/promises'
 import type { AstroConfig, AstroIntegration } from 'astro'
 
-export default function awsAmplify(userOptions: { loadEnv?: boolean }): AstroIntegration {
+export default function awsAmplify(): AstroIntegration {
   let _config: AstroConfig
   return {
     name: 'astro-aws-amplify',
     hooks: {
-      'astro:config:setup': async ({ config, updateConfig }) => {
+      'astro:config:setup': ({ config, updateConfig }) => {
         updateConfig({
           build: {
             client: new URL(`./.amplify-hosting/static${config.base}`, config.root),
             server: new URL('./.amplify-hosting/compute/default/', config.root),
           },
         })
-        if (userOptions?.loadEnv !== false) await import('dotenv/config')
       },
       'astro:config:done': ({ config, setAdapter }) => {
         setAdapter({
