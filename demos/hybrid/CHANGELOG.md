@@ -1,5 +1,12 @@
 # hybrid
 
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies [[`a5718d4`](https://github.com/alexnguyennz/astro-aws-amplify/commit/a5718d470043db7abcd07e5c601c348a9a87efb5)]:
+  - astro-aws-amplify@0.1.0
+
 ## 0.0.6
 
 ### Patch Changes
