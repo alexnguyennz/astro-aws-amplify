@@ -1,5 +1,11 @@
 # astro-aws-amplify
 
+## 0.1.0
+
+### Minor Changes
+
+- [#21](https://github.com/alexnguyennz/astro-aws-amplify/pull/21) [`a5718d4`](https://github.com/alexnguyennz/astro-aws-amplify/commit/a5718d470043db7abcd07e5c601c348a9a87efb5) Thanks [@rishi-raj-jain](https://github.com/rishi-raj-jain)! - load environment variables automatically
+
 ## 0.0.9
 
 ### Patch Changes
