@@ -85,7 +85,7 @@ export default function awsAmplify(): AstroIntegration {
             sizes: [100, 200],
             domains: [],
             formats: ["image/webp"],
-            minumumCacheTTL: 60,
+            minimumCacheTTL: 60,
             dangerouslyAllowSVG: false,
           },
           computeResources: [
