@@ -51,13 +51,6 @@ export default function awsAmplify(): AstroIntegration {
           version: 1,
           routes: [
             {
-              path: "/images/*",
-              target: {
-                kind: "ImageOptimization",
-                cacheControl: "public, max-age=31536000, immutable",
-              },
-            },
-            {
               path: `${_config.base}assets/*`,
               target: {
                 kind: "Static",
@@ -81,13 +74,6 @@ export default function awsAmplify(): AstroIntegration {
               },
             },
           ],
-          imageSettings: {
-            sizes: [100, 200],
-            domains: [],
-            formats: ["image/webp"],
-            minimumCacheTTL: 60,
-            dangerouslyAllowSVG: false,
-          },
           computeResources: [
             {
               name: "default",
