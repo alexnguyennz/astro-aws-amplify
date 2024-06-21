@@ -73,8 +73,10 @@ You can use the following build specifications as-is or customize it to your lik
             - npm ci
         build:
           commands:
+            - env >> .env
             - npm run build
             - mv node_modules ./.amplify-hosting/compute/default
+            - mv .env ./.amplify-hosting/compute/default/.env
       artifacts:
         baseDirectory: .amplify-hosting
         files:
@@ -96,7 +98,10 @@ You can use the following build specifications as-is or customize it to your lik
             - pnpm i
         build:
           commands:
+            - env >> .env
             - pnpm run build
+            - mv .env ./.amplify-hosting/compute/default/.env
+
       artifacts:
         baseDirectory: .amplify-hosting
         files:
@@ -116,8 +121,10 @@ You can use the following build specifications as-is or customize it to your lik
             - yarn install
         build:
           commands:
+            - env >> .env
             - yarn run build
             - mv node_modules ./.amplify-hosting/compute/default
+            - mv .env ./.amplify-hosting/compute/default/.env
       artifacts:
         baseDirectory: .amplify-hosting
         files:
