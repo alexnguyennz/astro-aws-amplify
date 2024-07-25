@@ -43,7 +43,7 @@ importers:
         version: 0.3.3(prettier-plugin-astro@0.12.2)(prettier@3.1.1)(typescript@5.3.3)
       '@astrojs/mdx':
         specifier: ^2.0.0
-        version: 2.0.1(astro@4.0.6)
+        version: 2.0.1(astro@4.0.6(@types/node@20.10.4)(typescript@5.3.3))
       '@astrojs/rss':
         specifier: ^4.0.1
         version: 4.0.1
@@ -52,7 +52,7 @@ importers:
         version: 3.0.3
       astro:
         specifier: ^4.0.3
-        version: 4.0.6(typescript@5.3.3)
+        version: 4.0.6(@types/node@20.10.4)(typescript@5.3.3)
       astro-aws-amplify:
         specifier: workspace:*
         version: link:../../packages/astro-aws-amplify
@@ -67,7 +67,7 @@ importers:
         version: 0.3.3(prettier-plugin-astro@0.12.2)(prettier@3.1.1)(typescript@5.3.3)
       '@astrojs/mdx':
         specifier: ^2.0.0
-        version: 2.0.1(astro@4.0.6)
+        version: 2.0.1(astro@4.0.6(@types/node@20.10.4)(typescript@5.3.3))
       '@astrojs/rss':
         specifier: ^4.0.1
         version: 4.0.1
@@ -76,7 +76,7 @@ importers:
         version: 3.0.3
       astro:
         specifier: ^4.0.3
-        version: 4.0.6(typescript@5.3.3)
+        version: 4.0.6(@types/node@20.10.4)(typescript@5.3.3)
       astro-aws-amplify:
         specifier: workspace:*
         version: link:../../packages/astro-aws-amplify
@@ -91,16 +91,19 @@ importers:
         version: 0.3.3(prettier-plugin-astro@0.12.2)(prettier@3.1.1)(typescript@5.3.3)
       '@astrojs/mdx':
         specifier: ^2.0.0
-        version: 2.0.1(astro@4.0.6)
+        version: 2.0.1(astro@4.0.6(@types/node@20.10.4)(typescript@5.3.3))
       '@astrojs/rss':
         specifier: ^4.0.1
         version: 4.0.1
       '@astrojs/sitemap':
         specifier: ^3.0.3
         version: 3.0.3
+      '@hotwired/turbo':
+        specifier: ^8.0.5
+        version: 8.0.5
       astro:
         specifier: ^4.0.3
-        version: 4.0.6(typescript@5.3.3)
+        version: 4.0.6(@types/node@20.10.4)(typescript@5.3.3)
       astro-aws-amplify:
         specifier: workspace:*
         version: link:../../packages/astro-aws-amplify
@@ -112,10 +115,10 @@ importers:
     dependencies:
       astro:
         specifier: ^4.0.0
-        version: 4.0.6(typescript@5.3.3)
+        version: 4.0.6(@types/node@20.10.4)(typescript@5.3.3)
       astrojs-node-aws-amplify:
         specifier: ^7.0.1
-        version: 7.0.1(astro@4.0.6)
+        version: 7.0.1(astro@4.0.6(@types/node@20.10.4)(typescript@5.3.3))
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
@@ -127,10 +130,10 @@ importers:
         version: 0.3.4(prettier-plugin-astro@0.12.2)(prettier@3.1.1)(typescript@5.3.3)
       '@astrojs/starlight':
         specifier: ^0.15.1
-        version: 0.15.1(astro@4.0.6)
+        version: 0.15.1(astro@4.0.6(@types/node@20.10.4)(typescript@5.3.3))
       astro:
         specifier: ^4.0.1
-        version: 4.0.6(typescript@5.3.3)
+        version: 4.0.6(@types/node@20.10.4)(typescript@5.3.3)
       sharp:
         specifier: ^0.32.5
         version: 0.32.6
@@ -565,9 +568,14 @@ packages:
   '@expressive-code/plugin-text-markers@0.30.1':
     resolution: {integrity: sha512-Dtw2lIsAfcfWy/qUhrEW1NwZdgMsI+qeHQ/7Do+W9fMBIoIIHh2GLwmhwkBitoOvLgOJQWsNoBvT42LUp2+16g==}
 
+  '@hotwired/turbo@8.0.5':
+    resolution: {integrity: sha512-TdZDA7fxVQ2ZycygvpnzjGPmFq4sO/E2QVg+2em/sJ3YTSsIWVEis8HmWlumz+c9DjWcUkcCuB+muF08TInpAQ==}
+    engines: {node: '>= 14'}
+
   '@humanwhocodes/config-array@0.11.13':
     resolution: {integrity: sha512-JSBDMiDKSzQVngfRjOdFXgFfklaXI4K9nLF49Auh21lmBWRLIK3+xTErTWD4KU54pb6coM6ESE7Awz/FNU3zgQ==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -575,6 +583,7 @@ packages:
 
   '@humanwhocodes/object-schema@2.0.1':
     resolution: {integrity: sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==}
+    deprecated: Use @eslint/object-schema instead
 
   '@jridgewell/gen-mapping@0.3.3':
     resolution: {integrity: sha512-HLhSWOLRi875zjjMG/r+Nv0oCW8umGb0BgEhyX3dDX3egwZtB8PqLnjz3yedt8R5StBrzcg4aBpnh8UA9D1BoQ==}
@@ -1661,6 +1670,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   globals@11.12.0:
     resolution: {integrity: sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==}
@@ -1850,6 +1860,7 @@ packages:
 
   inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
+    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
 
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
@@ -2789,6 +2800,7 @@ packages:
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rollup@4.9.0:
@@ -2885,9 +2897,11 @@ packages:
 
   shikiji@0.6.13:
     resolution: {integrity: sha512-4T7X39csvhT0p7GDnq9vysWddf2b6BeioiN3Ymhnt3xcy9tXmDcnsEFVxX18Z4YcQgEE/w48dLJ4pPPUcG9KkA==}
+    deprecated: Shikiji is merged back to Shiki v1.0, please migrate over to get the latest updates
 
   shikiji@0.8.7:
     resolution: {integrity: sha512-j5usxwI0yHkDTHOuhuSJl9+wT5CNYeYO82dJMSJBlJ/NYT5SIebGcPoL6y9QOyH15wGrJC4LOP2nz5k8mUDGRQ==}
+    deprecated: Shikiji is merged back to Shiki v1.0, please migrate over to get the latest updates
 
   side-channel@1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
@@ -3611,8 +3625,6 @@ snapshots:
       '@volar/typescript': 1.10.10
       fast-glob: 3.3.2
       muggle-string: 0.3.1
-      prettier: 3.1.1
-      prettier-plugin-astro: 0.12.2
       volar-service-css: 0.0.16(@volar/language-service@1.10.10)
       volar-service-emmet: 0.0.16(@volar/language-service@1.10.10)
       volar-service-html: 0.0.16(@volar/language-service@1.10.10)
@@ -3621,6 +3633,9 @@ snapshots:
       volar-service-typescript-twoslash-queries: 0.0.16(@volar/language-service@1.10.10)
       vscode-html-languageservice: 5.1.1
       vscode-uri: 3.0.8
+    optionalDependencies:
+      prettier: 3.1.1
+      prettier-plugin-astro: 0.12.2
     transitivePeerDependencies:
       - typescript
 
@@ -3636,8 +3651,6 @@ snapshots:
       '@volar/typescript': 1.10.10
       fast-glob: 3.3.2
       muggle-string: 0.3.1
-      prettier: 3.1.1
-      prettier-plugin-astro: 0.12.2
       volar-service-css: 0.0.16(@volar/language-service@1.10.10)
       volar-service-emmet: 0.0.16(@volar/language-service@1.10.10)
       volar-service-html: 0.0.16(@volar/language-service@1.10.10)
@@ -3646,6 +3659,9 @@ snapshots:
       volar-service-typescript-twoslash-queries: 0.0.16(@volar/language-service@1.10.10)
       vscode-html-languageservice: 5.1.1
       vscode-uri: 3.0.8
+    optionalDependencies:
+      prettier: 3.1.1
+      prettier-plugin-astro: 0.12.2
     transitivePeerDependencies:
       - typescript
 
@@ -3668,12 +3684,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/mdx@2.0.1(astro@4.0.6)':
+  '@astrojs/mdx@2.0.1(astro@4.0.6(@types/node@20.10.4)(typescript@5.3.3))':
     dependencies:
       '@astrojs/markdown-remark': 4.0.1
       '@mdx-js/mdx': 3.0.0
       acorn: 8.11.2
-      astro: 4.0.6(typescript@5.3.3)
+      astro: 4.0.6(@types/node@20.10.4)(typescript@5.3.3)
       es-module-lexer: 1.4.1
       estree-util-visit: 2.0.0
       github-slugger: 2.0.0
@@ -3703,15 +3719,15 @@ snapshots:
       sitemap: 7.1.1
       zod: 3.22.4
 
-  '@astrojs/starlight@0.15.1(astro@4.0.6)':
+  '@astrojs/starlight@0.15.1(astro@4.0.6(@types/node@20.10.4)(typescript@5.3.3))':
     dependencies:
-      '@astrojs/mdx': 2.0.1(astro@4.0.6)
+      '@astrojs/mdx': 2.0.1(astro@4.0.6(@types/node@20.10.4)(typescript@5.3.3))
       '@astrojs/sitemap': 3.0.3
       '@pagefind/default-ui': 1.0.4
       '@types/hast': 3.0.3
       '@types/mdast': 4.0.3
-      astro: 4.0.6(typescript@5.3.3)
-      astro-expressive-code: 0.30.1(astro@4.0.6)
+      astro: 4.0.6(@types/node@20.10.4)(typescript@5.3.3)
+      astro-expressive-code: 0.30.1(astro@4.0.6(@types/node@20.10.4)(typescript@5.3.3))
       bcp-47: 2.1.0
       execa: 8.0.1
       hast-util-select: 6.0.2
@@ -4176,6 +4192,8 @@ snapshots:
       hastscript: 7.2.0
       unist-util-visit-parents: 5.1.3
 
+  '@hotwired/turbo@8.0.5': {}
+
   '@humanwhocodes/config-array@0.11.13':
     dependencies:
       '@humanwhocodes/object-schema': 2.0.1
@@ -4413,6 +4431,7 @@ snapshots:
       '@typescript-eslint/visitor-keys': 6.14.0
       debug: 4.3.4
       eslint: 8.56.0
+    optionalDependencies:
       typescript: 5.3.3
     transitivePeerDependencies:
       - supports-color
@@ -4440,6 +4459,7 @@ snapshots:
       is-glob: 4.0.3
       semver: 7.5.4
       ts-api-utils: 1.0.3(typescript@5.3.3)
+    optionalDependencies:
       typescript: 5.3.3
     transitivePeerDependencies:
       - supports-color
@@ -4597,12 +4617,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  astro-expressive-code@0.30.1(astro@4.0.6):
+  astro-expressive-code@0.30.1(astro@4.0.6(@types/node@20.10.4)(typescript@5.3.3)):
     dependencies:
-      astro: 4.0.6(typescript@5.3.3)
+      astro: 4.0.6(@types/node@20.10.4)(typescript@5.3.3)
       remark-expressive-code: 0.30.1
 
-  astro@4.0.6(typescript@5.3.3):
+  astro@4.0.6(@types/node@20.10.4)(typescript@5.3.3):
     dependencies:
       '@astrojs/compiler': 2.3.4
       '@astrojs/internal-helpers': 0.2.1
@@ -4660,8 +4680,8 @@ snapshots:
       tsconfck: 3.0.0(typescript@5.3.3)
       unist-util-visit: 5.0.0
       vfile: 6.0.1
-      vite: 5.0.10
-      vitefu: 0.2.5(vite@5.0.10)
+      vite: 5.0.10(@types/node@20.10.4)
+      vitefu: 0.2.5(vite@5.0.10(@types/node@20.10.4))
       which-pm: 2.1.1
       yargs-parser: 21.1.1
       zod: 3.22.4
@@ -4683,9 +4703,9 @@ snapshots:
       '@astrojs/compiler': 2.3.4
       synckit: 0.8.6
 
-  astrojs-node-aws-amplify@7.0.1(astro@4.0.6):
+  astrojs-node-aws-amplify@7.0.1(astro@4.0.6(@types/node@20.10.4)(typescript@5.3.3)):
     dependencies:
-      astro: 4.0.6(typescript@5.3.3)
+      astro: 4.0.6(@types/node@20.10.4)(typescript@5.3.3)
       send: 0.18.0
       server-destroy: 1.0.1
     transitivePeerDependencies:
@@ -7435,7 +7455,7 @@ snapshots:
       typescript: 5.3.3
 
   tsconfck@3.0.0(typescript@5.3.3):
-    dependencies:
+    optionalDependencies:
       typescript: 5.3.3
 
   tslib@2.6.2: {}
@@ -7685,48 +7705,51 @@ snapshots:
       unist-util-stringify-position: 4.0.0
       vfile-message: 4.0.2
 
-  vite@5.0.10:
+  vite@5.0.10(@types/node@20.10.4):
     dependencies:
       esbuild: 0.19.9
       postcss: 8.4.32
       rollup: 4.9.0
     optionalDependencies:
+      '@types/node': 20.10.4
       fsevents: 2.3.3
 
-  vitefu@0.2.5(vite@5.0.10):
-    dependencies:
-      vite: 5.0.10
+  vitefu@0.2.5(vite@5.0.10(@types/node@20.10.4)):
+    optionalDependencies:
+      vite: 5.0.10(@types/node@20.10.4)
 
   volar-service-css@0.0.16(@volar/language-service@1.10.10):
     dependencies:
-      '@volar/language-service': 1.10.10
       vscode-css-languageservice: 6.2.11
       vscode-uri: 3.0.8
+    optionalDependencies:
+      '@volar/language-service': 1.10.10
 
   volar-service-emmet@0.0.16(@volar/language-service@1.10.10):
     dependencies:
-      '@volar/language-service': 1.10.10
       '@vscode/emmet-helper': 2.9.2
       volar-service-html: 0.0.16(@volar/language-service@1.10.10)
+    optionalDependencies:
+      '@volar/language-service': 1.10.10
 
   volar-service-html@0.0.16(@volar/language-service@1.10.10):
     dependencies:
-      '@volar/language-service': 1.10.10
       vscode-html-languageservice: 5.1.1
       vscode-uri: 3.0.8
+    optionalDependencies:
+      '@volar/language-service': 1.10.10
 
   volar-service-prettier@0.0.16(@volar/language-service@1.10.10)(prettier@3.1.1):
-    dependencies:
+    optionalDependencies:
       '@volar/language-service': 1.10.10
       prettier: 3.1.1
 
   volar-service-typescript-twoslash-queries@0.0.16(@volar/language-service@1.10.10):
-    dependencies:
+    optionalDependencies:
       '@volar/language-service': 1.10.10
 
   volar-service-typescript@0.0.16(@volar/language-service@1.10.10)(@volar/typescript@1.10.10):
     dependencies:
-      '@volar/language-service': 1.10.10
       '@volar/typescript': 1.10.10
       path-browserify: 1.0.1
       semver: 7.5.4
@@ -7734,6 +7757,8 @@ snapshots:
       vscode-languageserver-textdocument: 1.0.11
       vscode-nls: 5.2.0
       vscode-uri: 3.0.8
+    optionalDependencies:
+      '@volar/language-service': 1.10.10
 
   vscode-css-languageservice@6.2.11:
     dependencies:
