@@ -1,0 +1,55 @@
+---
+export const prerender = false;
+
+const response = await fetch('http://localhost:8888/v1/objects/quote');
+const data = await response.json();
+const locales = {
+    companyName: "GERB Schwingungsisolierungen GmbH & Co. KG",
+};
+
+const quoteHtml = data.quote;
+
+
+// Server-side log
+console.log("Fetched HTML Content:", quoteHtml);
+---
+
+<html>
+<head>
+    <title>Quote</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .text-tapni-primary {
+            color: #ffffff;
+        }
+        .text-tapni-secondary {
+            color: #6b7280;
+        }
+        .bg-tapni-header {
+            background-color: #007bff;
+        }
+        .bg-tapni-button {
+            background-color: #007bff;
+        }
+        .hover\:bg-tapni-button:hover {
+            background-color: #0056b3;
+        }
+        .bg-tapni-section {
+            background-color: #f8f9fa;
+        }
+        .bg-tapni-comment {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen">
+<div id="quote" class="w-full max-w-4xl bg-white rounded-lg shadow-lg">
+    <Fragment set:html={quoteHtml} />
+</div>
+</body>
+</html>

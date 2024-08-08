@@ -1,0 +1,343 @@
+---
+import {buildRules} from "eslint-plugin-astro/lib/a11y/rules";
+export const prerender = false;
+
+const apiRoot = "https://api.tapni.co";
+
+const slug = Astro.params.slug;
+let response = await fetch(`${apiRoot}/v1/objects/record/${slug}`);
+const data = await response.json();
+
+let quote = data.record.data;
+
+response = await fetch(`${apiRoot}/v1/objects/record/${quote.t_company_quote}`);
+const company = await response.json();
+
+quote.company = company.record.data;
+
+
+let lineItems = [];
+for (const item of JSON.parse(quote.t_line_items)) {
+    response = await fetch(`${apiRoot}/v1/objects/record/${item}`);
+    let lineItem = await response.json();
+
+    response = await fetch(`${apiRoot}/v1/objects/record/${lineItem.record.data.t_line_item_product}`);
+    const product = await response.json();
+
+    lineItem.record.data.product = product.record.data;
+
+    lineItems.push(lineItem.record.data);
+}
+quote.t_line_items = lineItems;
+
+response = await fetch(`${apiRoot}/v1/objects/record/${quote.t_client}?model=contact`);
+const client = await response.json();
+quote.client = client.record.payload;
+
+
+const locales = {
+    de: {
+        print: "Drucken",
+        referenceLabel: "Referenz",
+        commentLabel: "Kommentar",
+        productsLabel: "Produkte & Dienstleistungen",
+        productName: "Name",
+        descriptionLabel: "Beschreibung",
+        quantityLabel: "Menge",
+        unitPriceLabel: "Einzelpreis",
+        discount: "Rabatt",
+        totalLabel: "Gesamt",
+        totalAmountLabel: "Gesamtbetrag",
+        annualSubtotalLabel: "Jährlich Gesamt",
+        oneTimeSubtotalLabel: "Einmalig Gesamt",
+        paymentLabel: "Zahlung",
+        paymentStatusLabel: "Status",
+        paymentTermsLabel: "Zahlungsbedingungen",
+        expirationLabel: "Angebot läuft ab am",
+        status_t_paid: "Bezahlt",
+        status_t_unpaid: "Unbezahlt",
+    },
+    en: {
+        print: "Print",
+        referenceLabel: "Reference",
+        commentLabel: "Comment",
+        productsLabel: "Products & Services",
+        productName: "Name",
+        descriptionLabel: "Description",
+        quantityLabel: "Quantity",
+        unitPriceLabel: "Unit Price",
+        discount: "Discount",
+        totalLabel: "Total",
+        totalAmountLabel: "Total Amount",
+        annualSubtotalLabel: "Annual Subtotal",
+        oneTimeSubtotalLabel: "One-Time Subtotal",
+        paymentLabel: "Payment",
+        paymentStatusLabel: "Status",
+        paymentTermsLabel: "Payment Terms",
+        expirationLabel: "Offer expires on",
+        status_t_paid: "Paid",
+        status_t_unpaid: "Unpaid",
+    }
+};
+
+const locale = locales[data.lang || 'en'];
+
+/*
+const quote = {
+    id: "100524357",
+    name: "GERB Schwingungsisolierungen GmbH & Co. KG",
+    currency: "EUR",
+    lang: "de",
+
+    quoteDate: "23. Juli 2024",
+    reference: "20240723-100524357",
+
+    comment: "Vielen Dank für das nette Gespräch eben! Anbei finden Sie das offizielle Angebot. Wir freuen uns schon, nach Bestätigung mit dem Onboarding Prozess zu beginnen. Mihajlo Nikodijević - Founder & CEO Tapni GmbH",
+    paymentStatus: "paid",
+    paymentNote: "",
+    paymentTerms: `Zahlungsmöglichkeiten:\n- Online-Zahlung per Kreditkarte über den Link im Angebot\n- Banküberweisung nach der Bestätigung des Angebots auf das Bankkonto: Erste Bank und Sparkassen AG, IBAN: AT302011184531048100, BIC: GIBAATWWXXXX`,
+    expirationDate: "22. August 2024",
+
+    // Account Object -> Right Now
+    contactName: "Mihajlo Nikodijević",
+    contactEmail: "mihajlo@tapni.com",
+    contactPhone: "+436764900674",
+
+    // Account Object -> Later
+    account: {
+        contactName: "Mihajlo Nikodijević",
+        contactEmail: "mihajlo@tapni.com",
+        contactPhone: "+436764900674",
+    },
+    // Line Items Before Total -> Later
+    line_items_before_total: [
+        {
+            //...
+            discount_reason: "Special Offer",
+            discount_type: "percentage",
+            discount_value: 100,
+            quantity: 1,
+        }
+    ],
+
+
+    // Company Object
+    company: {
+        name: "GERB Schwingungsisolierungen GmbH & Co. KG",
+        address: "525 W MONROE ST, STE 2360",
+        zip: "60607",
+        city: "Chicago",
+        state: "IL",
+        country: "United States",
+    },
+
+    // Contacts Object
+    client: {
+        contactName: "Max Mustermann",
+        contactEmail: "max@mustermann.com",
+    },
+
+    // Line Items
+    line_items: [
+        {
+            product: {
+                name: "Tapni for Business™",
+                description: "Tapni for Business™ - 1 year",
+                sku: "TAPNI-BUSINESS-1Y",
+                product_price: "499,90",
+                product_currency: "EUR",
+                product_billing_cycle: "year",
+                product_billing_frequency: 1,
+
+                // Later -> More currencies
+                price: [
+                    {
+                        amount: '499.90',
+                        currency: 'EUR',
+                        billing_cycle: 'year',
+                        billing_frequency: 1,
+                    },
+                ],
+            },
+
+            // These fields can be changed in the quote without affecting the product
+            product_name: "Tapni for Business™",
+            product_description: "Tapni for Business™ - 1 year",
+            product_sku: "TAPNI-BUSINESS-1Y",
+            product_price: "499,90",
+            product_currency: "EUR",
+            product_billing_cycle: "year",
+            product_billing_frequency: 1,
+
+            discount_reason: "Special Offer",
+            discount_type: "percentage",
+            discount_value: 100,
+            quantity: 1,
+        }
+    ],
+};
+*/
+---
+
+<html>
+<head>
+    <title>Tapni Quote {quote.t_reference}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .text-tapni-primary {
+            color: #ffffff;
+        }
+        .text-tapni-secondary {
+            color: #6b7280;
+        }
+        .bg-tapni-header {
+            background-color: #007bff;
+        }
+        .bg-tapni-button {
+            background-color: #007bff;
+        }
+        .hover\:bg-tapni-button:hover {
+            background-color: #0056b3;
+        }
+        .bg-tapni-section {
+            background-color: #f8f9fa;
+        }
+        .bg-tapni-comment {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen">
+<div id="quote" class="w-full max-w-4xl bg-white rounded-lg shadow-lg">
+    <div class="flex justify-between p-6">
+        <div>
+            <img src="/big-black-no-color.png" alt="Tapni Logo" class="w-20">
+        </div>
+        <button onclick="window.print()" class="bg-tapni-button text-white px-4 rounded hover:bg-tapni-button-dark">
+            {locale.print}
+        </button>
+    </div>
+    <div class="bg-tapni-header text-center p-6">
+        <h1 class="text-3xl font-bold text-tapni-primary">{quote.t_quote_name}</h1>
+        <p class="text-tapni-primary">{quote.t_quote_created_date} | {locale.referenceLabel}: {quote.t_reference}</p>
+    </div>
+
+    <div class="p-6 bg-tapni-section">
+        <div class="flex justify-between">
+            <div>
+                <h2 class="text-xl font-bold text-gray-700">{quote.company.t_name}</h2>
+                <p class="text-gray-600">{quote.company.t_company_street_address}</p>
+                <p class="text-gray-600">{quote.company.t_company_city}, {quote.company.t_company_state} {quote.company.t_company_zip}</p>
+                <p class="text-gray-600">{quote.company.t_company_country}</p>
+            </div>
+            <div class="text-right">
+                <h2 class="text-xl font-bold text-gray-700">{quote.client.name}</h2>
+                <p class="text-gray-600">{quote.client.email}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-6 bg-tapni-comment rounded-lg mx-6 mb-6">
+        <h2 class="text-lg font-semibold text-gray-700">{locale.commentLabel}</h2>
+        <p class="text-gray-700 whitespace-pre-line mb-4">{quote.t_comment}</p>
+        <p class="text-sm text-gray-700 text-right">
+            {quote.t_contact_name} | <a class="underline" href={`mailto:${quote.t_contact_email}`}>{quote.t_contact_email}</a> | {quote.t_contact_phone}
+        </p>
+    </div>
+
+    <div class="p-6 bg-tapni-section">
+        <h2 class="text-xl font-bold text-gray-700 mb-4">{locale.productsLabel}</h2>
+        <table class="w-full text-left">
+            <thead>
+            <tr class="border-b">
+                <th class="pb-2">{locale.descriptionLabel}</th>
+                <th class="pb-2">{locale.quantityLabel}</th>
+                <th class="pb-2">{locale.unitPriceLabel}</th>
+                <th class="pb-2 hidden">{locale.discount}</th>
+                <th class="pb-2">{locale.totalLabel}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {quote.t_line_items.map((item) => (
+                    <tr class="border-b text-sm">
+                        <td class="py-2">
+                            <h5 class="text-lg font-semibold text-gray-700">{item.product.t_product_name}</h5>
+                            <p set:html={item.product.t_product_description.replace(/\n/g, '<br/>')}></p>
+                        </td>
+                        <td class="py-2">{item.t_quantity_item}</td>
+                        <td class="py-2">
+                            {item.product.t_product_price} {item.product.t_product_currency}
+                            <br> {item.product.t_product_billing_cycle === 'once' ? 'one-time' : 'per ' + item.product.t_product_billing_cycle}
+                        </td>
+                        <td class="py-2 hidden">{item.t_line_item_discount_value}{item.t_line_item_discount_type === 'percentage' ? '%' : item.t_product_currency} </td>
+                        <td class="py-2">
+                            {(parseInt(item.t_quantity_item) * parseFloat(item.product.t_product_price?.replace(',', '.')) * (1 - item.t_line_item_discount_value / 100)).toFixed(2)} {item.product.t_product_currency}
+                            <br> {item.product.t_product_billing_cycle === 'once' ? 'one-time' : 'per ' + item.product.t_product_billing_cycle}
+                            {item.t_line_item_discount_value !== '0' ? <br><span class="absolute mt-3 float-left text-green-500">after discount</span> : ''}
+                        </td>
+                    </tr>
+            ))}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Total and Payment Sections Aligned -->
+    <div class="flex justify-between p-6 bg-tapni-section">
+
+        <!-- Payment Section -->
+        <div class="w-1/2">
+            <h2 class="text-xl font-bold text-gray-700 mb-4">{locale.paymentLabel}</h2>
+            <p class="text-gray-700">{locale.paymentStatusLabel}: {locale['status_' + quote.t_payment_status]}</p>
+            <p class="text-gray-700">{quote.paymentNote}</p>
+        </div>
+
+        <!-- Total Section -->
+        <div class="w-1/2 text-right">
+            <h2 class="text-xl font-bold text-gray-700 mb-4">{locale.totalLabel}</h2>
+            <div class="text-sm">
+                <p class="text-gray-700">
+                    {locale.annualSubtotalLabel}:
+                    {quote.t_line_items
+                        .filter(item => item.product.t_product_billing_cycle !== 'once')
+                        .reduce((acc, item) => acc + parseInt(item.t_quantity_item) * parseFloat(item.product.t_product_price?.replace(',', '.')) * (1 - item.t_line_item_discount_value / 100), 0)
+                        .toFixed(2)} {quote.t_line_items[0].product.t_product_currency}
+                </p>
+                {quote.t_line_items.some(item => item.product.t_product_billing_cycle !== 'once' && item.t_line_item_discount_value !== '0') ?
+                        <p class="text-green-500">after discount</p>
+                    : null}
+                <p class="text-gray-700 mt-2">
+                    {locale.oneTimeSubtotalLabel}:
+                    {quote.t_line_items
+                        .filter(item => item.product.t_product_billing_cycle === 'once')
+                        .reduce((acc, item) => acc + parseInt(item.t_quantity_item) * parseFloat(item.product.t_product_price?.replace(',', '.')) * (1 - item.t_line_item_discount_value / 100), 0)
+                        .toFixed(2)} {quote.t_line_items[0].product.t_product_currency}
+                </p>
+                {quote.t_line_items.some(item => item.product.t_product_billing_cycle === 'once' && item.t_line_item_discount_value !== '0') ?
+                        <p class="text-green-500">after discount</p>
+                    : null}
+
+                <p class="text-lg text-gray-700 mt-2 font-bold">
+                    {locale.totalAmountLabel}:
+                    {quote.t_line_items.reduce((acc, item) => acc + parseInt(item.t_quantity_item) * parseFloat(item.product.t_product_price?.replace(',', '.')) * (1 - item.t_line_item_discount_value / 100), 0).toFixed(2)} {quote.t_line_items[0].product.t_product_currency}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-6 bg-tapni-comment rounded-lg mx-6 mb-6">
+        <h2 class="text-lg font-semibold text-gray-700">{locale.paymentTermsLabel}</h2>
+        <p class="text-gray-700 whitespace-pre-line">{quote.t_payment_terms}</p>
+    </div>
+
+    <div class="p-6 bg-tapni-section text-center">
+        <p class="text-sm text-gray-600">{locale.expirationLabel}: {quote.t_expiration_date}</p>
+    </div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,159 @@
+---
+const locales = {
+        companyName: "GERB Schwingungsisolierungen GmbH & Co. KG",
+        companyAddress: "525 W MONROE ST, STE 2360",
+        companyCityState: "60607 Chicago, IL, United States",
+        quoteDate: "23. Juli 2024",
+        referenceLabel: "Referenz",
+        reference: "20240723-100524357",
+        commentLabel: "Kommentar",
+        comment: "Vielen Dank für das nette Gespräch eben! Anbei finden Sie das offizielle Angebot. Wir freuen uns schon, nach Bestätigung mit dem Onboarding Prozess zu beginnen. Mihajlo Nikodijević - Founder & CEO Tapni GmbH",
+        productsLabel: "Produkte & Dienstleistungen",
+        descriptionLabel: "Beschreibung",
+        skuLabel: "SKU",
+        quantityLabel: "Menge",
+        unitPriceLabel: "Einzelpreis",
+        totalLabel: "Total",
+        paymentLabel: "Zahlung",
+        paymentStatusLabel: "Bezahlt",
+        paymentNote: "Paid at [[ paid_time ]] on [[ paid_date ]].",
+        paymentTermsLabel: "Zahlungsbedingungen",
+        paymentTerms: `Zahlungsmöglichkeiten:\n- Online-Zahlung per Kreditkarte über den Link im Angebot\n- Banküberweisung nach der Bestätigung des Angebots auf das Bankkonto: Erste Bank und Sparkassen AG, IBAN: AT302011184531048100, BIC: GIBAATWWXXXX`,
+        expirationLabel: "Angebot läuft ab am",
+        expirationDate: "22. August 2024",
+        contactName: "Mihajlo Nikodijević",
+        contactEmail: "mihajlo@tapni.com",
+        contactPhone: "+436764900674"
+};
+
+const products = [
+    {
+        description: "Tapni for Business™ - 1 year",
+        sku: "1",
+        quantity: "1",
+        unitPrice: "€ 499,90 / year",
+        total: "€ 0,00 / year after 100% discount",
+    },
+    {
+        description: "Tapni PRO™ - 1 year",
+        sku: "100",
+        quantity: "100",
+        unitPrice: "€ 29,90 / year",
+        total: "€ 1.490,00 / year after € 1.500,00 discount",
+    },
+];
+
+const paymentStatus = "Bezahlt";
+const paymentNote = "Paid at [[ paid_time ]] on [[ paid_date ]].";
+---
+
+<html>
+<head>
+    <title>Quote</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .text-tapni-primary {
+            color: #ffffff;
+        }
+        .text-tapni-secondary {
+            color: #6b7280;
+        }
+        .bg-tapni-header {
+            background-color: #007bff;
+        }
+        .bg-tapni-button {
+            background-color: #007bff;
+        }
+        .hover\:bg-tapni-button:hover {
+            background-color: #0056b3;
+        }
+        .bg-tapni-section {
+            background-color: #f8f9fa;
+        }
+        .bg-tapni-comment {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen">
+<div id="quote" class="w-full max-w-4xl bg-white rounded-lg shadow-lg">
+    <div class="flex justify-between p-6">
+        <div>
+            <img src="/big-black-no-color.png" alt="Tapni Logo" class="w-20">
+        </div>
+        <button onclick="window.print()" class="bg-tapni-button text-white px-4 rounded hover:bg-tapni-button-dark">
+            Print
+        </button>
+    </div>
+    <div class="bg-tapni-header text-center p-6">
+        <h1 class="text-3xl font-bold text-tapni-primary">{locales.companyName}</h1>
+        <p class="text-tapni-primary">{locales.quoteDate} | {locales.referenceLabel}: {locales.reference}</p>
+    </div>
+
+    <div class="p-6 bg-tapni-section">
+        <div class="flex justify-between">
+            <div>
+                <h2 class="text-xl font-bold text-gray-700">{locales.companyName}</h2>
+                <p class="text-gray-600">{locales.companyAddress}</p>
+                <p class="text-gray-600">{locales.companyCityState}</p>
+            </div>
+            <div class="text-right">
+                <h2 class="text-xl font-bold text-gray-700">Stephani Holewa</h2>
+                <p class="text-gray-600">stephani.holewa@gerb.de</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-6 bg-tapni-comment rounded-lg mx-6 mb-6">
+        <h2 class="text-lg font-semibold text-gray-700">{locales.commentLabel}</h2>
+        <p class="text-gray-700 whitespace-pre-line">{locales.comment}</p>
+    </div>
+
+    <div class="p-6 bg-tapni-section">
+        <h2 class="text-xl font-bold text-gray-700 mb-4">{locales.productsLabel}</h2>
+        <table class="w-full text-left">
+            <thead>
+            <tr class="border-b">
+                <th class="pb-2">{locales.descriptionLabel}</th>
+                <th class="pb-2">{locales.skuLabel}</th>
+                <th class="pb-2">{locales.quantityLabel}</th>
+                <th class="pb-2">{locales.unitPriceLabel}</th>
+                <th class="pb-2">{locales.totalLabel}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {products.map((product) => (
+                    <tr class="border-b">
+                        <td class="py-2">{product.description}</td>
+                        <td class="py-2">{product.sku}</td>
+                        <td class="py-2">{product.quantity}</td>
+                        <td class="py-2">{product.unitPrice}</td>
+                        <td class="py-2">{product.total}</td>
+                    </tr>
+            ))}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="p-6 bg-tapni-section">
+        <h2 class="text-xl font-bold text-gray-700 mb-4">{locales.paymentLabel}</h2>
+        <p class="text-gray-700">{locales.paymentStatusLabel}: {paymentStatus}</p>
+        <p class="text-gray-700">{paymentNote}</p>
+    </div>
+
+    <div class="p-6 bg-tapni-comment rounded-lg mx-6 mb-6">
+        <h2 class="text-lg font-semibold text-gray-700">{locales.paymentTermsLabel}</h2>
+        <p class="text-gray-700 whitespace-pre-line">{locales.paymentTerms}</p>
+    </div>
+
+    <div class="p-6 bg-tapni-section text-center">
+        <p class="text-sm text-gray-600">{locales.expirationLabel}: {locales.expirationDate}</p>
+    </div>
+</div>
+</body>
+</html>

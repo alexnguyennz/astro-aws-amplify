@@ -6,7 +6,7 @@ import awsAmplify from "astro-aws-amplify";
 // https://astro.build/config
 export default defineConfig({
   site: "https://example.com",
-  trailingSlash: "always",
+  trailingSlash: "ignore",
   integrations: [mdx(), sitemap()],
   output: "hybrid",
   adapter: awsAmplify(),
