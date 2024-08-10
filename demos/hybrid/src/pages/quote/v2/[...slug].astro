@@ -1,0 +1,380 @@
+---
+export const prerender = false;
+
+const apiRoot = "http://localhost:8888";
+
+const slug = Astro.params.slug;
+
+// Construct the query to fetch the desired fields and relationships
+const query = {
+    id: slug,
+    query: {
+        fields: [
+            "t_company_quote",
+            "t_line_items",
+            "t_client",
+            "t_quote_name",
+            "t_quote_created_date",
+            "t_reference",
+            "t_comment",
+            "t_contact_name",
+            "t_contact_email",
+            "t_contact_phone",
+            "t_payment_status",
+            "t_payment_terms",
+            "t_expiration_date",
+        ],
+        relations: {
+            t_company_quote: {
+                fields: [
+                    "t_name",
+                    "t_company_street_address",
+                    "t_company_city",
+                    "t_company_state",
+                    "t_company_zip",
+                    "t_company_country",
+                ],
+                relations: {},
+            },
+            t_line_items: {
+                fields: [
+                    "t_quantity_item",
+                    "t_line_item_discount_value",
+                    "t_line_item_discount_type",
+                    "t_line_item_product",
+                ],
+                relations: {
+                    t_line_item_product: {
+                        fields: [
+                            "t_product_name",
+                            "t_product_description",
+                            "t_product_price",
+                            "t_product_currency",
+                            "t_product_billing_cycle",
+                            "t_product_billing_frequency",
+                        ],
+                        relations: {},
+                    },
+                },
+            }
+        },
+    },
+};
+
+// Send a single POST request to fetch all data
+let response = await fetch(`${apiRoot}/v1/objects/record/${slug}`, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify(query),
+});
+
+const data = await response.json();
+let quote = data.record;
+
+// After fetching the data, you can directly access the nested fields
+quote.company = quote.t_company_quote; // Renaming for clarity
+quote.t_line_items = quote.t_line_items.map((item) => ({
+    ...item,
+    product: item.t_line_item_product,
+}));
+
+response = await fetch(`https://api.tapni.co/v1/objects/record/${quote.t_client}?model=contact`);
+const client = await response.json();
+quote.t_client = client.record.payload;
+
+// Define the locales for the template
+const locales = {
+    de: {
+        print: "Drucken",
+        referenceLabel: "Referenz",
+        commentLabel: "Kommentar",
+        productsLabel: "Produkte & Dienstleistungen",
+        productName: "Name",
+        descriptionLabel: "Beschreibung",
+        quantityLabel: "Menge",
+        unitPriceLabel: "Einzelpreis",
+        discount: "Rabatt",
+        totalLabel: "Gesamt",
+        totalAmountLabel: "Gesamtbetrag",
+        annualSubtotalLabel: "Jährlich Gesamt",
+        oneTimeSubtotalLabel: "Einmalig Gesamt",
+        paymentLabel: "Zahlung",
+        paymentStatusLabel: "Status",
+        paymentTermsLabel: "Zahlungsbedingungen",
+        expirationLabel: "Angebot läuft ab am",
+        status_t_paid: "Bezahlt",
+        status_t_unpaid: "Unbezahlt",
+    },
+    en: {
+        print: "Print",
+        referenceLabel: "Reference",
+        commentLabel: "Comment",
+        productsLabel: "Products & Services",
+        productName: "Name",
+        descriptionLabel: "Description",
+        quantityLabel: "Quantity",
+        unitPriceLabel: "Unit Price",
+        discount: "Discount",
+        totalLabel: "Total",
+        totalAmountLabel: "Total Amount",
+        annualSubtotalLabel: "Annual Subtotal",
+        oneTimeSubtotalLabel: "One-Time Subtotal",
+        paymentLabel: "Payment",
+        paymentStatusLabel: "Status",
+        paymentTermsLabel: "Payment Terms",
+        expirationLabel: "Offer expires on",
+        status_t_paid: "Paid",
+        status_t_unpaid: "Unpaid",
+    },
+};
+
+const locale = locales["en"];
+---
+
+<html>
+<head>
+    <title>Tapni Quote {quote.t_reference}</title>
+    <link
+            href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+            rel="stylesheet"
+    />
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .text-tapni-primary {
+            color: #ffffff;
+        }
+        .text-tapni-secondary {
+            color: #6b7280;
+        }
+        .bg-tapni-header {
+            background-color: #007bff;
+        }
+        .bg-tapni-button {
+            background-color: #007bff;
+        }
+        .hover\:bg-tapni-button:hover {
+            background-color: #0056b3;
+        }
+        .bg-tapni-section {
+            background-color: #f8f9fa;
+        }
+        .bg-tapni-comment {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen">
+<div id="quote" class="w-full max-w-4xl bg-white rounded-lg shadow-lg">
+    <div class="flex justify-between p-6">
+        <div>
+            <img
+                    src="/big-black-no-color.png"
+                    alt="Tapni Logo"
+                    class="w-20"
+            />
+        </div>
+        <button
+                onclick="window.print()"
+                class="bg-tapni-button text-white px-4 rounded hover:bg-tapni-button-dark"
+        >
+            {locale.print}
+        </button>
+    </div>
+    <div class="bg-tapni-header text-center p-6">
+        <h1 class="text-3xl font-bold text-tapni-primary">
+            {quote.t_quote_name}
+        </h1>
+        <p class="text-tapni-primary">
+            {quote.t_quote_created_date} | {locale.referenceLabel}: {quote.t_reference}
+        </p>
+    </div>
+
+    <div class="p-6 bg-tapni-section">
+        <div class="flex justify-between">
+            <div>
+                <h2 class="text-xl font-bold text-gray-700">{quote.company.t_name}</h2>
+                <p class="text-gray-600">{quote.company.t_company_street_address}</p>
+                <p class="text-gray-600">
+                    {quote.company.t_company_city}, {quote.company.t_company_state} {quote.company.t_company_zip}
+                </p>
+                <p class="text-gray-600">{quote.company.t_company_country}</p>
+            </div>
+            <div class="text-right">
+                <h2 class="text-xl font-bold text-gray-700">{quote.t_client.name}</h2>
+                <p class="text-gray-600">{quote.t_client.email}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-6 bg-tapni-comment rounded-lg mx-6 mb-6">
+        <h2 class="text-lg font-semibold text-gray-700">{locale.commentLabel}</h2>
+        <p class="text-gray-700 whitespace-pre-line mb-4">{quote.t_comment}</p>
+        <p class="text-sm text-gray-700 text-right">
+            {quote.t_contact_name} |
+            <a class="underline" href={`mailto:${quote.t_contact_email}`}>
+                {quote.t_contact_email}
+            </a>
+            | {quote.t_contact_phone}
+        </p>
+    </div>
+
+    <div class="p-6 bg-tapni-section">
+        <h2 class="text-xl font-bold text-gray-700 mb-4">{locale.productsLabel}</h2>
+        <table class="w-full text-left">
+            <thead>
+            <tr class="border-b">
+                <th class="pb-2">{locale.descriptionLabel}</th>
+                <th class="pb-2">{locale.quantityLabel}</th>
+                <th class="pb-2">{locale.unitPriceLabel}</th>
+                <th class="pb-2 hidden">{locale.discount}</th>
+                <th class="pb-2">{locale.totalLabel}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {quote.t_line_items.map((item) => (
+                    <tr class="border-b text-sm">
+                        <td class="py-2">
+                            <h5 class="text-lg font-semibold text-gray-700">
+                                {item.product.t_product_name}
+                            </h5>
+                            <p set:html={item.product.t_product_description.replace(/\n/g, "<br/>")}></p>
+                        </td>
+                        <td class="py-2">{item.t_quantity_item}</td>
+                        <td class="py-2">
+                            {item.product.t_product_price} {item.product.t_product_currency}
+                            <br />
+                            {item.product.t_product_billing_cycle === "once"
+                                ? "one-time"
+                                : "per " + item.product.t_product_billing_cycle}
+                        </td>
+                        <td class="py-2 hidden">
+                            {item.t_line_item_discount_value}
+                            {item.t_line_item_discount_type === "percentage"
+                                ? "%"
+                                : item.t_product_currency}{" "}
+                        </td>
+                        <td class="py-2">
+                            {(
+                                parseInt(item.t_quantity_item) *
+                                parseFloat(item.product.t_product_price?.replace(",", ".")) *
+                                (1 - item.t_line_item_discount_value / 100)
+                            ).toFixed(2)}{" "}
+                            {item.product.t_product_currency}
+                            <br />
+                            {item.product.t_product_billing_cycle === "once"
+                                ? "one-time"
+                                : "per " + item.product.t_product_billing_cycle}
+                            {item.t_line_item_discount_value !== "0" ? (
+                                    <br />
+                                    <span class="absolute mt-3 float-left text-green-500">
+                      after discount
+                    </span>
+                            ) : (
+                                ""
+                            )}
+                        </td>
+                    </tr>
+            ))}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Total and Payment Sections Aligned -->
+    <div class="flex justify-between p-6 bg-tapni-section">
+        <!-- Payment Section -->
+        <div class="w-1/2">
+            <h2 class="text-xl font-bold text-gray-700 mb-4">{locale.paymentLabel}</h2>
+            <p class="text-gray-700">
+                {locale.paymentStatusLabel}: {locale["status_" + quote.t_payment_status]}
+            </p>
+            <p class="text-gray-700">{quote.paymentNote}</p>
+        </div>
+
+        <!-- Total Section -->
+        <div class="w-1/2 text-right">
+            <h2 class="text-xl font-bold text-gray-700 mb-4">{locale.totalLabel}</h2>
+            <div class="text-sm">
+                <p class="text-gray-700">
+                    {locale.annualSubtotalLabel}:
+                    {quote.t_line_items
+                        .filter((item) => item.product.t_product_billing_cycle !== "once")
+                        .reduce(
+                            (acc, item) =>
+                                acc +
+                                parseInt(item.t_quantity_item) *
+                                parseFloat(item.product.t_product_price?.replace(",", ".")) *
+                                (1 - item.t_line_item_discount_value / 100),
+                            0
+                        )
+                        .toFixed(2)}{" "}
+                    {quote.t_line_items[0].product.t_product_currency}
+                </p>
+                {quote.t_line_items.some(
+                    (item) =>
+                        item.product.t_product_billing_cycle !== "once" &&
+                        item.t_line_item_discount_value !== "0"
+                ) ? (
+                        <p class="text-green-500">after discount</p>
+                ) : null}
+                <p class="text-gray-700 mt-2">
+                    {locale.oneTimeSubtotalLabel}:
+                    {quote.t_line_items
+                        .filter((item) => item.product.t_product_billing_cycle === "once")
+                        .reduce(
+                            (acc, item) =>
+                                acc +
+                                parseInt(item.t_quantity_item) *
+                                parseFloat(item.product.t_product_price?.replace(",", ".")) *
+                                (1 - item.t_line_item_discount_value / 100),
+                            0
+                        )
+                        .toFixed(2)}{" "}
+                    {quote.t_line_items[0].product.t_product_currency}
+                </p>
+                {quote.t_line_items.some(
+                    (item) =>
+                        item.product.t_product_billing_cycle === "once" &&
+                        item.t_line_item_discount_value !== "0"
+                ) ? (
+                        <p class="text-green-500">after discount</p>
+                ) : null}
+
+                <p class="text-lg text-gray-700 mt-2 font-bold">
+                    {locale.totalAmountLabel}:
+                    {quote.t_line_items
+                        .reduce(
+                            (acc, item) =>
+                                acc +
+                                parseInt(item.t_quantity_item) *
+                                parseFloat(item.product.t_product_price?.replace(",", ".")) *
+                                (1 - item.t_line_item_discount_value / 100),
+                            0
+                        )
+                        .toFixed(2)}{" "}
+                    {quote.t_line_items[0].product.t_product_currency}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-6 bg-tapni-comment rounded-lg mx-6 mb-6">
+        <h2 class="text-lg font-semibold text-gray-700">{locale.paymentTermsLabel}</h2>
+        <p class="text-gray-700 whitespace-pre-line">{quote.t_payment_terms}</p>
+    </div>
+
+    <div class="p-6 bg-tapni-section text-center">
+        <p class="text-sm text-gray-600">
+            {locale.expirationLabel}: {quote.t_expiration_date}
+        </p>
+    </div>
+</div>
+</body>
+</html>
+
+

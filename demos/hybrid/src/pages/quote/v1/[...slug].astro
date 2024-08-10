@@ -17,7 +17,7 @@ quote.company = company.record.data;
 
 
 let lineItems = [];
-for (const item of JSON.parse(quote.t_line_items)) {
+for (const item of quote.t_line_items) {
     response = await fetch(`${apiRoot}/v1/objects/record/${item}`);
     let lineItem = await response.json();
 
