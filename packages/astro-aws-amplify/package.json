@@ -24,8 +24,10 @@
     "./server": "./src/server.ts"
   },
   "dependencies": {
-    "astro": "^4.0.0",
     "astrojs-node-aws-amplify": "^7.0.1",
     "dotenv": "^16.4.5"
+  },
+  "peerDependencies": {
+    "astro": "^4.0.0"
   }
 }
