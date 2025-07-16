@@ -1,5 +1,12 @@
 # base-path
 
+## 0.0.8
+
+### Patch Changes
+
+- Updated dependencies []:
+  - astro-aws-amplify@0.2.0
+
 ## 0.0.7
 
 ### Patch Changes
