@@ -1,5 +1,11 @@
 # astro-aws-amplify
 
+## 0.2.1
+
+### Patch Changes
+
+- Add astro v5 as peer dependency
+
 ## 0.2.0
 
 ### Minor Changes

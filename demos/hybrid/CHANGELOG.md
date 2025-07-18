@@ -1,5 +1,12 @@
 # hybrid
 
+## 0.0.9
+
+### Patch Changes
+
+- Updated dependencies []:
+  - astro-aws-amplify@0.2.1
+
 ## 0.0.8
 
 ### Patch Changes
