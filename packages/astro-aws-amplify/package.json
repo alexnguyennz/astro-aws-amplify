@@ -28,6 +28,6 @@
     "dotenv": "^16.4.5"
   },
   "peerDependencies": {
-    "astro": "^4.0.0"
+    "astro": "^4.0.0 || ^5.0.0"
   }
 }
