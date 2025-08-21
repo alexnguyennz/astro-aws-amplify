@@ -78,7 +78,7 @@ export default function awsAmplify(): AstroIntegration {
             {
               name: "default",
               entrypoint: "entry.mjs",
-              runtime: "nodejs18.x",
+              runtime: "nodejs20.x",
             },
           ],
           framework: {
