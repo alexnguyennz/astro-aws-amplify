@@ -1,5 +1,11 @@
 # astro-aws-amplify
 
+## 0.2.2
+
+### Patch Changes
+
+- [`61db975`](https://github.com/alexnguyennz/astro-aws-amplify/commit/61db9752af11e5aa5663a9287486ad333095ab27) Thanks [@alexnguyennz](https://github.com/alexnguyennz)! - Update compute runtime node version in deploy manifest
+
 ## 0.2.1
 
 ### Patch Changes
