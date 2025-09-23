@@ -1,5 +1,11 @@
 # astro-aws-amplify
 
+## 0.2.3
+
+### Patch Changes
+
+- Fix TypeScript error with Astro 5.x compatibility
+
 ## 0.2.2
 
 ### Patch Changes
