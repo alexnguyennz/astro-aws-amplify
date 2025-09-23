@@ -29,11 +29,6 @@ export default function awsAmplify(): AstroIntegration {
             serverOutput: "stable",
             hybridOutput: "stable",
             staticOutput: "unsupported",
-            assets: {
-              supportKind: "stable",
-              isSharpCompatible: true,
-              isSquooshCompatible: true,
-            },
           },
           args: {
             client: config.build.client?.toString(),
