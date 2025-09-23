@@ -1,5 +1,12 @@
 # blog
 
+## 0.0.11
+
+### Patch Changes
+
+- Updated dependencies []:
+  - astro-aws-amplify@0.2.3
+
 ## 0.0.10
 
 ### Patch Changes
