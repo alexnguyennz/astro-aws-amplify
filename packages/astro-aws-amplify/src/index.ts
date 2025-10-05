@@ -4,8 +4,13 @@ import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export default function awsAmplify(): AstroIntegration {
+export interface AwsAmplifyOptions {
+  runtime?: string;
+}
+
+export default function awsAmplify(options: AwsAmplifyOptions = {}): AstroIntegration {
   let _config: AstroConfig;
+  const { runtime = "nodejs20.x" } = options;
 
   return {
     name: "astro-aws-amplify",
@@ -73,7 +78,7 @@ export default function awsAmplify(): AstroIntegration {
             {
               name: "default",
               entrypoint: "entry.mjs",
-              runtime: "nodejs20.x",
+              runtime,
             },
           ],
           framework: {
