@@ -6,7 +6,8 @@ Astro AWS Amplify is an Astro adapter for deploying server-side Astro sites on A
 
 ## Prerequisites
 
-- an Astro site - `v4.x` or higher (may also work on `v3.x` sites)
+- an Astro site - `v6.x`
+- Node.js `v22.12.0` or higher
 
 ## Installation
 

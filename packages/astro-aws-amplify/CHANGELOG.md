@@ -1,5 +1,16 @@
 # astro-aws-amplify
 
+## 1.0.0
+
+### Major Changes
+
+- Drop Astro 4/5 support, require Astro 6 (`^6.0.0`) and Node 22+
+- Remove `applyPolyfills` call (no longer exported by Astro 6, unnecessary on Node 22+)
+- Default Amplify compute runtime changed from `nodejs20.x` to `nodejs22.x`
+- Remove `hybridOutput` from supported features (`output: "hybrid"` was removed in Astro 6)
+- Add `sharpImageService: "stable"` to supported features
+- Update framework version in deploy manifest to `6.0.0`
+
 ## 0.2.4
 
 ### Patch Changes

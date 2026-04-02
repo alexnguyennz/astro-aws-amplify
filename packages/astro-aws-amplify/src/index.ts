@@ -10,7 +10,7 @@ export interface AwsAmplifyOptions {
 
 export default function awsAmplify(options: AwsAmplifyOptions = {}): AstroIntegration {
   let _config: AstroConfig;
-  const { runtime = "nodejs20.x" } = options;
+  const { runtime = "nodejs22.x" } = options;
 
   return {
     name: "astro-aws-amplify",
@@ -32,8 +32,8 @@ export default function awsAmplify(options: AwsAmplifyOptions = {}): AstroIntegr
           serverEntrypoint: "astro-aws-amplify/server",
           supportedAstroFeatures: {
             serverOutput: "stable",
-            hybridOutput: "stable",
             staticOutput: "unsupported",
+            sharpImageService: "stable",
           },
           args: {
             client: config.build.client?.toString(),
@@ -83,7 +83,7 @@ export default function awsAmplify(options: AwsAmplifyOptions = {}): AstroIntegr
           ],
           framework: {
             name: "astro",
-            version: "4.0.0",
+            version: "6.0.0",
           },
         };
 
