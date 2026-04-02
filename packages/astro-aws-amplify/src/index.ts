@@ -32,6 +32,7 @@ export default function awsAmplify(options: AwsAmplifyOptions = {}): AstroIntegr
           serverEntrypoint: "astro-aws-amplify/server",
           supportedAstroFeatures: {
             serverOutput: "stable",
+            hybridOutput: "stable",
             staticOutput: "unsupported",
             sharpImageService: "stable",
             envGetSecret: "stable",
