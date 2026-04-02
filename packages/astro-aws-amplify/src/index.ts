@@ -34,6 +34,7 @@ export default function awsAmplify(options: AwsAmplifyOptions = {}): AstroIntegr
             serverOutput: "stable",
             staticOutput: "unsupported",
             sharpImageService: "stable",
+            envGetSecret: "stable",
           },
           args: {
             client: config.build.client?.toString(),
