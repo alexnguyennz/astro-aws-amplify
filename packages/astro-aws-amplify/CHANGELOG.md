@@ -5,6 +5,8 @@
 ### Major Changes
 
 - Drop Astro 4/5 support, require Astro 6 (`^6.0.0`) and Node 22+
+- Migrate server entrypoint to Astro 6 `createApp()` API with `entrypointResolution: "auto"`
+- Remove deprecated `NodeApp`, `createExports()`, `start()` patterns
 - Remove `applyPolyfills` call (no longer exported by Astro 6, unnecessary on Node 22+)
 - Default Amplify compute runtime changed from `nodejs20.x` to `nodejs22.x`
 - Add `sharpImageService: "stable"` and `envGetSecret: "stable"` to supported features

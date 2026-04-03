@@ -184,6 +184,3 @@ Any other static files with extensions will work as usual.
 
 MIT
 
-## Acknowledgements
-
-Uses code from the [@astrojs/node](https://github.com/withastro/astro/tree/main/packages/integrations/node) adapter to establish a Node.js server required for AWS Amplify SSR environments.

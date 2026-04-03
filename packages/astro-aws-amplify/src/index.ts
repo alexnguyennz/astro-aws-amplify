@@ -30,19 +30,13 @@ export default function awsAmplify(options: AwsAmplifyOptions = {}): AstroIntegr
         setAdapter({
           name: "astro-aws-amplify",
           serverEntrypoint: "astro-aws-amplify/server",
+          entrypointResolution: "auto",
           supportedAstroFeatures: {
             serverOutput: "stable",
             hybridOutput: "stable",
             staticOutput: "unsupported",
             sharpImageService: "stable",
             envGetSecret: "stable",
-          },
-          args: {
-            client: config.build.client?.toString(),
-            server: config.build.server?.toString(),
-            host: config.server.host,
-            port: 3000,
-            assets: config.build.assets,
           },
         });
 
