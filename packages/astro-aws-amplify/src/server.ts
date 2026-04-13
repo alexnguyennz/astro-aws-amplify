@@ -1,9 +1,10 @@
-import "dotenv/config";
-
+import { AsyncLocalStorage } from "node:async_hooks";
 import { createReadStream, existsSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+
+if (existsSync(".env")) process.loadEnvFile();
 
 import { createApp } from "astro/app/entrypoint";
 import { createRequest, writeResponse } from "astro/app/node";
@@ -33,6 +34,7 @@ const port = Number(process.env.PORT) || 3000;
 const host = process.env.HOST || "0.0.0.0";
 
 const clientRoot = resolveClientRoot();
+const assetsPrefix = `/${app.manifest.assetsDir}`;
 
 function resolveClientRoot(): string | null {
   const serverDir = fileURLToPath(new URL(".", import.meta.url));
@@ -64,7 +66,7 @@ function tryServeStatic(
   const contentType = MIME_TYPES[ext] || "application/octet-stream";
   const headers: Record<string, string> = { "Content-Type": contentType };
 
-  if (stripped.startsWith("/_astro/")) {
+  if (stripped.startsWith(assetsPrefix)) {
     headers["Cache-Control"] = "public, max-age=31536000, immutable";
   }
 
@@ -73,21 +75,34 @@ function tryServeStatic(
   return true;
 }
 
-const server = createServer(async (req, res) => {
-  try {
-    if (req.url && tryServeStatic(req.url, res)) return;
+const als = new AsyncLocalStorage<string>();
 
-    const request = createRequest(req);
-    const response = await app.render(request, { addCookieHeader: true });
-    await writeResponse(response, res);
+process.on("unhandledRejection", (reason) => {
+  const requestUrl = als.getStore();
+  logger.error(`Unhandled rejection while rendering ${requestUrl}`);
+  console.error(reason);
+});
+
+const server = createServer(async (req, res) => {
+  if (req.url && tryServeStatic(req.url, res)) return;
+
+  let request: Request;
+  try {
+    request = createRequest(req, {
+      allowedDomains: app.getAllowedDomains?.() ?? [],
+    });
   } catch (err) {
-    logger.error(`Could not render ${req.url}`);
+    logger.error(`Could not create request for ${req.url}`);
     console.error(err);
-    if (!res.headersSent) {
-      res.writeHead(500, "Server error");
-      res.end();
-    }
+    res.statusCode = 500;
+    res.end("Internal Server Error");
+    return;
   }
+
+  const response = await als.run(request.url, () =>
+    app.render(request, { addCookieHeader: true }),
+  );
+  await writeResponse(response, res);
 });
 
 server.listen(port, host, () => {
