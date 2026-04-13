@@ -4,10 +4,10 @@ import { createServer } from "node:http";
 import { extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-if (existsSync(".env")) process.loadEnvFile();
-
 import { createApp } from "astro/app/entrypoint";
 import { createRequest, writeResponse } from "astro/app/node";
+
+if (existsSync(".env")) process.loadEnvFile();
 
 const MIME_TYPES: Record<string, string> = {
   ".html": "text/html",
@@ -34,7 +34,7 @@ const port = Number(process.env.PORT) || 3000;
 const host = process.env.HOST || "0.0.0.0";
 
 const clientRoot = resolveClientRoot();
-const assetsPrefix = `/${app.manifest.assetsDir}`;
+const assetsPrefix = `/${app.manifest.assetsDir}/`;
 
 function resolveClientRoot(): string | null {
   const serverDir = fileURLToPath(new URL(".", import.meta.url));
