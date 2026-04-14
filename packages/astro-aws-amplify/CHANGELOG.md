@@ -1,5 +1,16 @@
 # astro-aws-amplify
 
+## 0.3.0
+
+### Major Changes
+
+- Drop support for Astro v4 and v5
+- Add support for Astro v6
+- Bump minimum required Node version to 22.12.0
+- Bump default Amplify compute runtime from `nodejs20.x` to `nodejs22.x`
+- Add stable support for the Sharp image service
+- Add stable support for `astro:env` `getSecret()`
+
 ## 0.2.4
 
 ### Patch Changes

@@ -3,7 +3,7 @@ title: Features
 description: Features
 ---
 ## Supported
-- [server and hybrid](https://docs.astro.build/en/guides/server-side-rendering/#enable-on-demand-server-rendering) mode
+- [server and static](https://docs.astro.build/en/guides/server-side-rendering/#enable-on-demand-server-rendering) mode
 - image optimization with [`<Image>`](https://docs.astro.build/en/guides/images/#image--astroassets) and [`<Picture />`](https://docs.astro.build/en/guides/images/#picture-)
 - [base paths](https://docs.astro.build/en/reference/configuration-reference/#base)
 - [middleware](https://docs.astro.build/en/guides/middleware/)

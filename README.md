@@ -6,7 +6,8 @@ Astro AWS Amplify is an Astro adapter for deploying server-side Astro sites on A
 
 ## Prerequisites
 
-- an Astro site - `v4.x` or higher (may also work on `v3.x` sites)
+- an Astro site - `v6.x`
+- Node.js `v22.12.0` or higher
 
 ## Installation
 
@@ -27,7 +28,7 @@ import { defineConfig } from 'astro/config';
 + import awsAmplify from 'astro-aws-amplify';
 
 export default defineConfig({
-+ output: 'server', // output: 'hybrid'
++ output: 'server',
 + adapter: awsAmplify()
 })
 ```
@@ -36,7 +37,7 @@ export default defineConfig({
 
 ### Astro
 
-[Server and hybrid modes](https://docs.astro.build/en/guides/server-side-rendering/#enable-on-demand-server-rendering) are supported. For static sites, remove the adapter and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
+[Server and static modes](https://docs.astro.build/en/guides/server-side-rendering/#enable-on-demand-server-rendering) are supported. For fully static sites without SSR, remove the adapter and [follow these instructions](https://docs.astro.build/en/guides/deploy/aws/#aws-amplify).
 
 ### AWS Amplify
 
@@ -126,7 +127,7 @@ frontend:
 ## Features
 
 ### Supported
-- [server and hybrid](https://docs.astro.build/en/guides/server-side-rendering/#enable-on-demand-server-rendering) mode
+- [server and static](https://docs.astro.build/en/guides/server-side-rendering/#enable-on-demand-server-rendering) mode
 - image optimization with [`<Image>`](https://docs.astro.build/en/guides/images/#image--astroassets) and [`<Picture />`](https://docs.astro.build/en/guides/images/#picture-)
 - [base paths](https://docs.astro.build/en/reference/configuration-reference/#base)
 - [middleware](https://docs.astro.build/en/guides/middleware/)
@@ -140,7 +141,7 @@ frontend:
 
 ### Static or prerendered pages
 
-Static or prerendered pages (that are defined with `export const prerender = true` or default for hybrid) will need a rewrite rule.
+Static or prerendered pages (that are defined with `export const prerender = true`, or all pages by default when using `output: "static"`) will need a rewrite rule.
 
 For example, if you have a static `/about` page, create a rewrite of:
 
@@ -183,6 +184,3 @@ Any other static files with extensions will work as usual.
 
 MIT
 
-## Acknowledgements
-
-Uses code from the [@astrojs/node](https://github.com/withastro/astro/tree/main/packages/integrations/node) adapter to establish a Node.js server required for AWS Amplify SSR environments.

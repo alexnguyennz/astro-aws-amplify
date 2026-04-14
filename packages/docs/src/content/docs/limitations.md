@@ -5,7 +5,7 @@ description: Limitations
 
 ## Static or prerendered pages
 
-Static or prerendered pages (that are defined with `export const prerender = true` or default for hybrid) will need a rewrite rule.
+Static or prerendered pages (that are defined with `export const prerender = true`, or all pages by default when using `output: "static"`) will need a rewrite rule.
 
 For example, if you have a static `/about` page, create a rewrite of:
 

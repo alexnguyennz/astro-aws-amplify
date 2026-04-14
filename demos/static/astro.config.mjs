@@ -8,6 +8,6 @@ export default defineConfig({
   site: "https://example.com",
   trailingSlash: "always",
   integrations: [mdx(), sitemap()],
-  output: "hybrid",
+  output: "static",
   adapter: awsAmplify(),
 });
