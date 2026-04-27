@@ -1,5 +1,12 @@
 # astro-aws-amplify
 
+## 0.4.0
+
+### Minor Changes
+
+- Add support for redirects defined in `astro.config.mjs` — generates `.amplify-hosting/customRules.json` from your `redirects` config
+- Expose `astro-aws-amplify/redirects` subpath export for composing custom rule pipelines
+
 ## 0.3.0
 
 ### Major Changes
