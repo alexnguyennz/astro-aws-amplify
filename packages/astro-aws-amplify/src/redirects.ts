@@ -101,15 +101,22 @@ function isAbsoluteUrl(value: string): boolean {
  * falls back to SSR.
  *
  * Skipped for:
+ *   - URLs with a query string or fragment (`?` / `#`) — the trailing-slash
+ *     convention only applies to the path portion of a URL
  *   - the root `/` (always canonical)
  *   - paths ending in `<*>` — Amplify's wildcard is greedy and matches both
  *     `/blog/foo` and `/blog/foo/` from a single rule
  *   - paths ending in a file-extension-like suffix (e.g. `/sitemap.xml`)
  */
 function applyTrailingSlash(path: string, mode: TrailingSlashMode): string {
+  // Query strings and fragments aren't part of the path — leave them alone
+  // rather than producing broken targets like `/foo/?bar=1/`.
+  if (/[?#]/.test(path)) return path;
+
   if (path === "/" || path.endsWith("<*>") || /\.[a-z0-9]+$/i.test(path)) {
     return path;
   }
+
   if (mode === "always" && !path.endsWith("/")) return `${path}/`;
   if (mode === "never" && path.endsWith("/")) return path.slice(0, -1);
   return path;
