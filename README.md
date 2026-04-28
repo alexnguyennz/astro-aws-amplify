@@ -168,8 +168,8 @@ Unlike Vercel and Netlify, AWS Amplify Hosting does not auto-discover redirect r
 #### Option A — Amplify Console (one-time, manual)
 
 1. Open your app in the AWS Amplify Console.
-2. Go to **App settings → Rewrites and redirects**.
-3. Click **Open text editor**, paste the contents of `.amplify-hosting/customRules.json`, and save.
+2. Go to **Hosting → Rewrites and redirects**.
+3. Click **Manage rewrites and redirects**, paste the contents of `.amplify-hosting/customRules.json`, and save.
 
 #### Option B — `aws amplify update-app` (one-shot or scripted)
 
@@ -202,7 +202,7 @@ Set `AWS_APP_ID` as an Amplify environment variable, and attach an IAM policy al
 
 ### Status code mapping
 
-Amplify only supports `301` and `302` as redirect statuses, so Astro's other codes are folded onto these:
+Amplify only supports `301` and `302` as redirect statuses, so Astro's other codes are converted as follows:
 
 | Astro | Amplify |
 | ----- | ------- |
@@ -212,7 +212,7 @@ Amplify only supports `301` and `302` as redirect statuses, so Astro's other cod
 | `307` | `302`   |
 | `308` | `301`   |
 
-`301` and `302` map exactly. `303`, `307`, and `308` fold onto Amplify's nearest equivalent and emit a `warn`-level log at build time so the semantic difference is visible. Any other status code is skipped with a warning.
+`301` and `302` map exactly. `303`, `307`, and `308` emit a warning log at build time so the change is visible. Unknown status codes are also skipped with a warning.
 
 ### Dynamic params and spread routes
 
@@ -231,13 +231,13 @@ If your site is served under a `base` (`base: "/docs"` in `astro.config.mjs`), t
 
 Absolute URLs (`https://...`, `http://...`, or protocol-relative `//host/...`) are preserved verbatim in `target` and never base-prefixed.
 
-### Rule ordering
-
-Amplify evaluates `customRules` in declaration order — first match wins. The adapter sorts generated rules so more specific patterns come before generic ones (fewer wildcards first; longer literal prefixes break ties), preventing catch-alls from shadowing specific rules.
-
 ### Trailing slashes
 
 The adapter reads `config.trailingSlash` and aligns generated rules with the canonical URL shape: literal sources/targets get a `/` appended for `"always"`, stripped for `"never"`, and left as-is for `"ignore"` (the default). Wildcard endings (`/blog/<*>`), file-like paths (`/sitemap.xml`), and absolute URL targets (`https://...`) are never modified. Named placeholders (`/blog/<slug>`) are treated like literal segments and do receive the trailing-slash treatment.
+
+### Rule ordering
+
+Amplify evaluates `customRules` in declaration order — first match wins. The adapter sorts generated rules so more specific patterns come before generic ones (fewer wildcards first; longer literal prefixes break ties), preventing catch-alls from shadowing specific rules.
 
 ## Features
 
