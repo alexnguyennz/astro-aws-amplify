@@ -258,7 +258,7 @@ Amplify evaluates `customRules` in declaration order — the first match wins. T
 
 ## Custom rules
 
-Astro's `redirects` config only models redirects. For anything else Amplify supports — SPA-fallback rewrites, API proxies, catch-all 404s, region-conditional rules — pass platform-native rules through the adapter's `customRules` option:
+Astro's `redirects` config only models redirects. For anything else Amplify supports — SPA-fallback rewrites, API proxies, catch-all 404s, region-conditional rules — pass them through the adapter's `customRules` option:
 
 ```js
 // astro.config.mjs
@@ -278,17 +278,17 @@ export default defineConfig({
 });
 ```
 
-Rules from `customRules` are written to `.amplify-hosting/customRules.json` verbatim, **after** the rules generated from `redirects`. That ordering matters: Amplify evaluates rules first-match-wins, so a specific Astro-config redirect like `/old-marketing` → `/products/foo` will fire before a generic catch-all rewrite declared here.
+These are appended to `.amplify-hosting/customRules.json` verbatim, after the rules generated from `redirects`. Amplify evaluates rules in declaration order — first match wins — so a specific Astro redirect won't be shadowed by a catch-all rewrite declared here.
 
-The option accepts the same `AmplifyCustomRule` shape Amplify's API expects (`{ source, target, status, condition? }`), so anything you'd write into the Amplify Console's "Rewrites and redirects" editor or push with `aws amplify update-app --custom-rules` works here. Status values are `"200"` (rewrite), `"301"`, `"302"`, `"404"`, or `"404-200"`.
+Like the generated redirects, the file isn't picked up automatically — you'll need to [apply it to your Amplify app](#apply-the-rules-to-your-amplify-app) for the rules to take effect.
 
-The type is re-exported for convenience:
+The option accepts the `AmplifyCustomRule` shape Amplify's API expects (`{ source, target, status, condition? }`), so anything you'd write in the Amplify Console or push via `aws amplify update-app --custom-rules` works here. Status values are `"200"` (rewrite), `"301"`, `"302"`, `"404"`, or `"404-200"`. The type is re-exported from the main entry for convenience:
 
 ```ts
 import type { AmplifyCustomRule } from "astro-aws-amplify";
 
 const rules: AmplifyCustomRule[] = [
-  { source: "/api/<*>", target: "/api/<*>", status: "200" },
+  { source: "/<a>/", target: "/<a>/index.html", status: "200" },
 ];
 ```
 
@@ -300,7 +300,7 @@ const rules: AmplifyCustomRule[] = [
 - [base paths](https://docs.astro.build/en/reference/configuration-reference/#base)
 - [middleware](https://docs.astro.build/en/guides/middleware/)
 - [redirects](#redirects) — auto-generated `customRules.json` from `astro.config.mjs`
-- [custom rules](#custom-rules) — pass platform-native rewrites, proxies, and 404 fallbacks through the adapter
+- [custom rules](#custom-rules) — pass Amplify rewrites, proxies, and 404 fallbacks through the adapter
 
 ### Unsupported or untested
 - [Amplify Image](https://docs.aws.amazon.com/amplify/latest/userguide/image-optimization.html) optimization

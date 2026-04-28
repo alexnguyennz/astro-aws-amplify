@@ -143,9 +143,30 @@ export default defineConfig({
 
 After build, apply the generated file to your app via the Amplify Console, the AWS CLI (`aws amplify update-app --custom-rules`), or an `amplify.yml` postBuild step.
 
-You can also pass platform-native rules (rewrites, API proxies, catch-all 404s) through a `customRules` option on the adapter — they're appended verbatim to the same file.
+See the [package README](./packages/astro-aws-amplify/README.md#redirects) for the full reference — pattern syntax, status code mapping, base path and trailing-slash handling, rule ordering, and the apply workflow in detail.
 
-See the [package README](./packages/astro-aws-amplify/README.md#redirects) for the full reference — pattern syntax, status code mapping, base path and trailing-slash handling, rule ordering, custom rules, and the apply workflow in detail.
+## Custom rules
+
+For anything that isn't a redirect — SPA-fallback rewrites, API proxies, catch-all 404s — pass Amplify rules through the adapter's `customRules` option:
+
+```js
+// astro.config.mjs
+export default defineConfig({
+  output: "server",
+  adapter: awsAmplify({
+    customRules: [
+      { source: "/images/<*>", target: "https://images.example.com/<*>", status: "200" },
+      { source: "/<a>/", target: "/<a>/index.html", status: "200" },
+    ],
+  }),
+});
+```
+
+These are appended to `.amplify-hosting/customRules.json` verbatim, after the rules generated from `redirects`. Amplify evaluates rules in declaration order — first match wins — so a specific Astro redirect won't be shadowed by a catch-all rewrite declared here.
+
+Like the generated redirects, the file isn't picked up automatically — you'll need to apply it via one of the [three methods](#redirects) in the Redirects section.
+
+See the [package README](./packages/astro-aws-amplify/README.md#custom-rules) for the full reference.
 
 ## Features
 
@@ -155,6 +176,7 @@ See the [package README](./packages/astro-aws-amplify/README.md#redirects) for t
 - [base paths](https://docs.astro.build/en/reference/configuration-reference/#base)
 - [middleware](https://docs.astro.build/en/guides/middleware/)
 - [redirects](#redirects) — auto-generated `customRules.json` from `astro.config.mjs`
+- [custom rules](#custom-rules) — pass Amplify rewrites, proxies, and 404 fallbacks through the adapter
 
 ### Unsupported or untested
 - [Amplify Image](https://docs.aws.amazon.com/amplify/latest/userguide/image-optimization.html) optimization
