@@ -126,118 +126,24 @@ frontend:
 
 ## Redirects
 
-Redirects defined in `astro.config.mjs` are translated into AWS Amplify "Rewrites and redirects" rules at build time and written to `.amplify-hosting/customRules.json`. The shape of that file matches the payload accepted by `aws amplify update-app --custom-rules`, so you can apply it to your Amplify app verbatim.
-
-### Declare redirects in your Astro config
+Redirects defined in your `astro.config.mjs` are translated into AWS Amplify "Rewrites and redirects" rules at build time and written to `.amplify-hosting/customRules.json`:
 
 ```js
 // astro.config.mjs
-import { defineConfig } from "astro/config";
-import awsAmplify from "astro-aws-amplify";
-
 export default defineConfig({
   output: "server",
   adapter: awsAmplify(),
   redirects: {
-    // Static redirect — defaults to 301 (permanent).
     "/old-page": "/new-page",
-    // Dynamic param with explicit status. Status options: 301, 302, 303, 307, 308.
     "/blog/[slug]": { status: 302, destination: "/posts/[slug]" },
-    // Spread / catch-all params are supported.
     "/docs/[...path]": "/help/[...path]",
   },
 });
 ```
 
-After `astro build` runs, `.amplify-hosting/customRules.json` will contain:
+After build, apply the generated file to your app via the Amplify Console, the AWS CLI (`aws amplify update-app --custom-rules`), or an `amplify.yml` postBuild step.
 
-```json
-[
-  { "source": "/old-page", "target": "/new-page", "status": "301" },
-  { "source": "/blog/<slug>", "target": "/posts/<slug>", "status": "302" },
-  { "source": "/docs/<*>", "target": "/help/<*>", "status": "301" }
-]
-```
-
-If your config has no `redirects` entries, the file is not written.
-
-### Apply the rules to your Amplify app
-
-Unlike Vercel and Netlify, AWS Amplify Hosting does not auto-discover redirect rules from a build artifact. You need to push the generated rules to the app once — pick whichever of these fits your workflow.
-
-#### Option A — Amplify Console (one-time, manual)
-
-1. Open your app in the AWS Amplify Console.
-2. Go to **Hosting → Rewrites and redirects**.
-3. Click **Manage rewrites and redirects**, paste the contents of `.amplify-hosting/customRules.json`, and save.
-
-#### Option B — `aws amplify update-app` (one-shot or scripted)
-
-```sh
-aws amplify update-app \
-  --app-id "$AWS_APP_ID" \
-  --custom-rules "$(cat .amplify-hosting/customRules.json)"
-```
-
-Requires `awscli` configured with credentials that have `amplify:UpdateApp` permission.
-
-#### Option C — `amplify.yml` postBuild step (continuous deployment)
-
-Add a `postBuild` step so every Amplify build pushes the latest rules:
-
-```yaml
-postBuild:
-  commands:
-    - |
-      if [ -f .amplify-hosting/customRules.json ]; then
-        aws amplify update-app \
-          --app-id "$AWS_APP_ID" \
-          --custom-rules "$(cat .amplify-hosting/customRules.json)"
-      fi
-```
-
-Set `AWS_APP_ID` as an Amplify environment variable, and attach an IAM policy allowing `amplify:UpdateApp` on the app's ARN to your Amplify service role.
-
-> **Heads up:** `update-app` with `--custom-rules` *replaces* the rule list. If you also manage rules in the Console, define them all in `astro.config.mjs` instead so the build is the single source of truth.
-
-### Status code mapping
-
-Amplify only supports `301` and `302` as redirect statuses, so Astro's other codes are converted as follows:
-
-| Astro | Amplify |
-| ----- | ------- |
-| `301` | `301`   |
-| `302` | `302`   |
-| `303` | `302`   |
-| `307` | `302`   |
-| `308` | `301`   |
-
-`301` and `302` map exactly. `303`, `307`, and `308` emit a warning log at build time so the change is visible. Unknown status codes are also skipped with a warning.
-
-### Dynamic params and spread routes
-
-Amplify supports two distinct placeholder constructs and the adapter maps each Astro segment to the right one:
-
-- `[param]` → `<param>` — named placeholder. The same name in `target` substitutes the captured segment, so `/old/[a]/[b]` → `/new/[a]/[b]` becomes `/old/<a>/<b>` → `/new/<a>/<b>`. Multiple named placeholders per rule are allowed.
-- `[...spread]` → `<*>` — greedy wildcard. Matches one or more segments and must appear at the end of the source as a single occurrence (a constraint Astro already satisfies, since spread is only allowed as the trailing segment).
-
-Mixed patterns like `/site/[lang]/[...rest]` translate to `/site/<lang>/<*>`.
-
-### Base paths
-
-If your site is served under a `base` (`base: "/docs"` in `astro.config.mjs`), the adapter automatically prefixes both `source` and `target` with the base. Write redirect keys/values relative to the site root — the prefixing is handled for you.
-
-### External destinations
-
-Absolute URLs (`https://...`, `http://...`, or protocol-relative `//host/...`) are preserved verbatim in `target` and never base-prefixed.
-
-### Trailing slashes
-
-The adapter reads `config.trailingSlash` and aligns generated rules with the canonical URL shape: literal sources/targets get a `/` appended for `"always"`, stripped for `"never"`, and left as-is for `"ignore"` (the default). Wildcard endings (`/blog/<*>`), file-like paths (`/sitemap.xml`), and absolute URL targets (`https://...`) are never modified. Named placeholders (`/blog/<slug>`) are treated like literal segments and do receive the trailing-slash treatment.
-
-### Rule ordering
-
-Amplify evaluates `customRules` in declaration order — first match wins. The adapter sorts generated rules so more specific patterns come before generic ones (fewer wildcards first; longer literal prefixes break ties), preventing catch-alls from shadowing specific rules.
+See the [package README](./packages/astro-aws-amplify/README.md#redirects) for the full reference — pattern syntax, status code mapping, base path and trailing-slash handling, rule ordering, and the apply workflow in detail.
 
 ## Features
 
