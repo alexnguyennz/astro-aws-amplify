@@ -164,7 +164,7 @@ export default defineConfig({
 
 These are appended to `.amplify-hosting/customRules.json` verbatim, after the rules generated from `redirects`. Amplify evaluates rules in declaration order — first match wins — so a specific Astro redirect won't be shadowed by a catch-all rewrite declared here.
 
-Like the generated redirects, the file isn't picked up automatically — you'll need to apply it via one of the [three methods](#redirects) in the Redirects section.
+Like the generated redirects, the file isn't picked up automatically — you'll need to [apply it to your Amplify app](./packages/astro-aws-amplify/README.md#apply-the-rules-to-your-amplify-app) for the rules to take effect.
 
 See the [package README](./packages/astro-aws-amplify/README.md#custom-rules) for the full reference.
 
@@ -202,7 +202,7 @@ adapter: awsAmplify({
 }),
 ```
 
-Adjust the trailing slash on `source` and `target` to match your [`trailingSlash`](https://docs.astro.build/en/reference/configuration-reference/#trailingslash) setting — drop it for `"never"`, keep it for `"always"` and the default `"ignore"`. For sites served under a `base`, prefix accordingly (`/base/about/` → `/base/about/index.html`). Like every other entry in `customRules`, you'll need to apply the generated file to your Amplify app for these rewrites to take effect — see the [Redirects](#redirects) section above for the three available methods.
+Adjust the trailing slash on `source` and `target` to match your [`trailingSlash`](https://docs.astro.build/en/reference/configuration-reference/#trailingslash) setting — drop it for `"never"`, keep it for `"always"` and the default `"ignore"`. For sites served under a `base`, prefix accordingly (`/base/about/` → `/base/about/index.html`). Like every other entry in `customRules`, you'll need to [apply the generated file](./packages/astro-aws-amplify/README.md#apply-the-rules-to-your-amplify-app) to your Amplify app for these rewrites to take effect.
 
 The other option is to set up the same rules manually in the Amplify Console under **Hosting → Rewrites and redirects** — useful if you'd rather not put them in your Astro config or already manage Amplify rules outside of code.
 
