@@ -256,6 +256,42 @@ Wildcard endings (`/blog/<*>`) are left alone in every mode because Amplify's `<
 
 Amplify evaluates `customRules` in declaration order — the first match wins. The adapter sorts the generated rules so more specific patterns come before generic ones (rules with fewer wildcards first; longer literal prefixes break ties). That keeps a generic catch-all like `/[...all]` from accidentally swallowing a specific `/blog/[slug]` redirect declared on the same site.
 
+## Custom rules
+
+Astro's `redirects` config only models redirects. For anything else Amplify supports — SPA-fallback rewrites, API proxies, catch-all 404s, region-conditional rules — pass platform-native rules through the adapter's `customRules` option:
+
+```js
+// astro.config.mjs
+import { defineConfig } from "astro/config";
+import awsAmplify from "astro-aws-amplify";
+
+export default defineConfig({
+  output: "server",
+  adapter: awsAmplify({
+    customRules: [
+      // Reverse proxy — serve another origin's content under the same URL.
+      { source: "/images/<*>", target: "https://images.example.com/<*>", status: "200" },
+      // SPA-style fallback for prerendered directory pages.
+      { source: "/<a>/", target: "/<a>/index.html", status: "200" },
+    ],
+  }),
+});
+```
+
+Rules from `customRules` are written to `.amplify-hosting/customRules.json` verbatim, **after** the rules generated from `redirects`. That ordering matters: Amplify evaluates rules first-match-wins, so a specific Astro-config redirect like `/old-marketing` → `/products/foo` will fire before a generic catch-all rewrite declared here.
+
+The option accepts the same `AmplifyCustomRule` shape Amplify's API expects (`{ source, target, status, condition? }`), so anything you'd write into the Amplify Console's "Rewrites and redirects" editor or push with `aws amplify update-app --custom-rules` works here. Status values are `"200"` (rewrite), `"301"`, `"302"`, `"404"`, or `"404-200"`.
+
+The type is re-exported for convenience:
+
+```ts
+import type { AmplifyCustomRule } from "astro-aws-amplify";
+
+const rules: AmplifyCustomRule[] = [
+  { source: "/api/<*>", target: "/api/<*>", status: "200" },
+];
+```
+
 ## Features
 
 ### Supported
@@ -264,6 +300,7 @@ Amplify evaluates `customRules` in declaration order — the first match wins. T
 - [base paths](https://docs.astro.build/en/reference/configuration-reference/#base)
 - [middleware](https://docs.astro.build/en/guides/middleware/)
 - [redirects](#redirects) — auto-generated `customRules.json` from `astro.config.mjs`
+- [custom rules](#custom-rules) — pass platform-native rewrites, proxies, and 404 fallbacks through the adapter
 
 ### Unsupported or untested
 - [Amplify Image](https://docs.aws.amazon.com/amplify/latest/userguide/image-optimization.html) optimization
@@ -274,7 +311,24 @@ Amplify evaluates `customRules` in declaration order — the first match wins. T
 
 ### Static or prerendered pages
 
-Static or prerendered pages (that are defined with `export const prerender = true`, or all pages by default when using `output: "static"`) will need a rewrite rule.
+Static or prerendered pages (defined with `export const prerender = true`, or all pages when using `output: "static"`) need a rewrite rule, since Amplify routes those paths to the SSR compute by default.
+
+The cleanest option is to declare these through the adapter's [`customRules`](#custom-rules) option, which keeps them in `astro.config.mjs` alongside the rest of your config:
+
+```js
+adapter: awsAmplify({
+  customRules: [
+    // Static page
+    { source: "/about/", target: "/about/index.html", status: "200" },
+    // Static dynamic route (e.g. /blog/[slug].astro)
+    { source: "/blog/<slug>/", target: "/blog/<slug>/index.html", status: "200" },
+  ],
+}),
+```
+
+Adjust the trailing slash on `source` and `target` to match your [`trailingSlash`](https://docs.astro.build/en/reference/configuration-reference/#trailingslash) setting — drop it for `"never"`, keep it for `"always"` and the default `"ignore"`. For sites served under a `base`, prefix accordingly (`/base/about/` → `/base/about/index.html`). Like every other entry in `customRules`, you'll need to [apply the generated file](#apply-the-rules-to-your-amplify-app) to your Amplify app for these rewrites to take effect.
+
+The other option is to set up the same rules manually in the Amplify Console under **Hosting → Rewrites and redirects** — useful if you'd rather not put them in your Astro config or already manage Amplify rules outside of code.
 
 For example, if you have a static `/about` page, create a rewrite of:
 
@@ -294,8 +348,7 @@ For static dynamic routes, like a route of `/blog/[slug].astro`, create a rewrit
 /blog/<slug>/ /blog/<slug>/index.html 200 (Rewrite)
 ```
 
-
-#### Base path rewrites
+For sites served under a `base`:
 
 ```
 /base/about/ /base/about/index.html 200 (Rewrite)

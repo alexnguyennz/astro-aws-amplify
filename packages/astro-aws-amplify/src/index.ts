@@ -8,7 +8,13 @@ import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import type { AmplifyCustomRule } from "./redirects.js";
 import { buildCustomRules } from "./redirects.js";
+
+export type {
+  AmplifyCustomRule,
+  AmplifyRedirectStatus,
+} from "./redirects.js";
 
 export interface AwsAmplifyOptions {
   /**
@@ -17,6 +23,18 @@ export interface AwsAmplifyOptions {
    * Defaults to `"nodejs22.x"`. Must be a runtime supported by Amplify Hosting.
    */
   runtime?: string;
+
+  /**
+   * Extra Amplify custom rules appended verbatim after the rules generated
+   * from `astro.config.mjs`'s `redirects` field. Use these for SPA-fallback
+   * rewrites, API proxies, catch-all 404s, or anything else Astro's
+   * `redirects` field doesn't model.
+   *
+   * Rules are emitted in declaration order, after the (specificity-sorted)
+   * generated redirects. That ordering means a generic catch-all rewrite
+   * here won't shadow a specific redirect from `astro.config.mjs`.
+   */
+  customRules?: AmplifyCustomRule[];
 }
 
 export default function awsAmplify(
@@ -113,29 +131,42 @@ export default function awsAmplify(
         );
 
         // Translate `redirects` from astro.config.mjs into Amplify's
-        // customRules format. Amplify Hosting does not auto-discover redirect
-        // rules from a build artifact the way Vercel/Netlify do, so this file
-        // is meant to be applied to the app via the Amplify Console, the AWS
-        // CLI, or an `amplify.yml` postBuild step. See the README "Redirects"
-        // section for the full deployment workflow.
+        // customRules format, then append any user-supplied rules from the
+        // `customRules` adapter option verbatim. Amplify Hosting does not
+        // auto-discover redirect rules from a build artifact the way
+        // Vercel/Netlify do, so this file is meant to be applied to the app
+        // via the Amplify Console, the AWS CLI, or an `amplify.yml`
+        // postBuild step. See the README "Redirects" section for the full
+        // deployment workflow.
         //
-        // Skipped when there are no redirects so builds don't emit an empty
+        // Skipped when both lists are empty so builds don't emit an empty
         // config alongside the rest of the artifact tree.
-        const customRules = buildCustomRules(
+        const generatedRules = buildCustomRules(
           _routes,
           _config.base,
           _config.trailingSlash,
           logger,
         );
-        if (customRules.length > 0) {
+        const extraRules = options.customRules ?? [];
+        const allRules = [...generatedRules, ...extraRules];
+
+        if (allRules.length > 0) {
           await writeFile(
             join(amplifyHostingDir, "customRules.json"),
-            JSON.stringify(customRules, null, 2) + "\n",
+            JSON.stringify(allRules, null, 2) + "\n",
           );
+
+          const parts: string[] = [];
+          if (generatedRules.length > 0) {
+            parts.push(`${generatedRules.length} from redirects`);
+          }
+          if (extraRules.length > 0) {
+            parts.push(`${extraRules.length} from customRules`);
+          }
           logger.info(
-            `Generated ${customRules.length} Amplify custom rule${
-              customRules.length === 1 ? "" : "s"
-            } → .amplify-hosting/customRules.json`,
+            `Wrote ${allRules.length} Amplify rule${
+              allRules.length === 1 ? "" : "s"
+            } (${parts.join(", ")}) → .amplify-hosting/customRules.json`,
           );
         }
       },

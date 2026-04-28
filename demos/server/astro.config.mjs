@@ -12,9 +12,19 @@ export default defineConfig({
   },
   integrations: [mdx(), sitemap()],
   output: "server",
-  adapter: awsAmplify(),
-  // Demonstrates the redirect → Amplify customRules pipeline.
-  // After build, see `.amplify-hosting/customRules.json`.
+  // Demonstrates the redirect → Amplify customRules pipeline. Both the
+  // `redirects` field below and the `customRules` adapter option flow into
+  // `.amplify-hosting/customRules.json` after `astro build`.
+  adapter: awsAmplify({
+    customRules: [
+      // Rewrite for a specific prerendered page (status 200 = serve the
+      // target file without changing the URL in the browser).
+      { source: "/about/", target: "/about/index.html", status: "200" },
+      // Same pattern with a placeholder, covering any single-segment
+      // prerendered page (e.g. /contact/, /pricing/).
+      { source: "/<a>/", target: "/<a>/index.html", status: "200" },
+    ],
+  }),
   redirects: {
     // Static redirect (default 301).
     "/old-page": "/new-page",
