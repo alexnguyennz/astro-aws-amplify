@@ -11,4 +11,11 @@ export default defineConfig({
   integrations: [mdx(), sitemap()],
   output: "server",
   adapter: awsAmplify(),
+  // Demonstrates the redirect → Amplify customRules pipeline together with
+  // the `base` config option. Both `source` and `target` are auto-prefixed
+  // with `/base/` in the generated `.amplify-hosting/customRules.json`.
+  redirects: {
+    "/old-page": "/new-page",
+    "/blog/[slug]": { status: 302, destination: "/posts/[slug]" },
+  },
 });
