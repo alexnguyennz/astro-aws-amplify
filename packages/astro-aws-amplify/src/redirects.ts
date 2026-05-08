@@ -231,6 +231,60 @@ export function buildCustomRule(
 }
 
 /**
+ * Convert a single Astro prerendered page route into an Amplify rewrite rule.
+ *
+ * Returns `null` for routes that aren't prerendered pages (i.e. routes that
+ * will be handled by SSR at runtime).
+ *
+ * For a page at `/about/`, the generated rule rewrites the request to
+ * `/about/index.html` in Amplify's static file storage, bypassing the SSR
+ * compute entirely. For a file-extension page like `/rss.xml`, the source
+ * and target are identical since the file has no extra directory wrapper.
+ */
+export function buildPrerenderRewriteRule(
+  route: IntegrationResolvedRoute,
+  base: string,
+  trailingSlash: TrailingSlashMode,
+): AmplifyCustomRule | null {
+  if (route.type !== "page" || !route.isPrerendered) return null;
+
+  const amplifyPattern = astroPatternToAmplify(joinBase(base, route.pattern));
+  const source = applyTrailingSlash(amplifyPattern, trailingSlash);
+
+  const hasFileExtension = /\.[a-z0-9]+$/i.test(route.pattern);
+  const target = hasFileExtension
+    ? source
+    : applyTrailingSlash(amplifyPattern + "/index.html", trailingSlash);
+
+  // sanitize base path so "/" is just "/index.html" and not "//index.html"
+  return { source, target: target.replace("//", "/"), status: "200" };
+}
+
+/**
+ * Build Amplify rewrite rules for all prerendered pages in the route list.
+ *
+ * The result is sorted from most specific to most generic so that catch-all
+ * patterns can't shadow specific rules at evaluation time.
+ */
+export function buildPrerenderRewrites(
+  routes: IntegrationResolvedRoute[],
+  base: string,
+  trailingSlash: TrailingSlashMode,
+): AmplifyCustomRule[] {
+  const rules = routes
+    .map((route) => buildPrerenderRewriteRule(route, base, trailingSlash))
+    .filter((rule): rule is AmplifyCustomRule => rule !== null);
+
+  rules.sort((a, b) => {
+    const [aw, al] = specificityKey(a.source);
+    const [bw, bl] = specificityKey(b.source);
+    return aw !== bw ? aw - bw : al - bl;
+  });
+
+  return rules;
+}
+
+/**
  * Build the Amplify customRules payload from the resolved Astro routes.
  *
  * The result is sorted from most specific to most generic so that catch-all

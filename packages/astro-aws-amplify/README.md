@@ -271,7 +271,7 @@ export default defineConfig({
     customRules: [
       // Reverse proxy — serve another origin's content under the same URL.
       { source: "/images/<*>", target: "https://images.example.com/<*>", status: "200" },
-      // SPA-style fallback for prerendered directory pages.
+      // SPA-style fallback for unmatched paths.
       { source: "/<a>/", target: "/<a>/index.html", status: "200" },
     ],
   }),
@@ -299,6 +299,7 @@ const rules: AmplifyCustomRule[] = [
 - image optimization with [`<Image>`](https://docs.astro.build/en/guides/images/#image--astroassets) and [`<Picture />`](https://docs.astro.build/en/guides/images/#picture-)
 - [base paths](https://docs.astro.build/en/reference/configuration-reference/#base)
 - [middleware](https://docs.astro.build/en/guides/middleware/)
+- [prerendered pages](#static-or-prerendered-pages) — rewrite rules auto-generated for every static/prerendered page
 - [redirects](#redirects) — auto-generated `customRules.json` from `astro.config.mjs`
 - [custom rules](#custom-rules) — pass Amplify rewrites, proxies, and 404 fallbacks through the adapter
 
@@ -311,48 +312,16 @@ const rules: AmplifyCustomRule[] = [
 
 ### Static or prerendered pages
 
-Static or prerendered pages (defined with `export const prerender = true`, or all pages when using `output: "static"`) need a rewrite rule, since Amplify routes those paths to the SSR compute by default.
+Static or prerendered pages (defined with `export const prerender = true`, or all pages when using `output: "static"`) get a rewrite rule generated automatically — the adapter emits a `status: "200"` entry in `customRules.json` for each prerendered page, routing the request directly to the static file instead of through SSR compute.
 
-The cleanest option is to declare these through the adapter's [`customRules`](#custom-rules) option, which keeps them in `astro.config.mjs` alongside the rest of your config:
-
-```js
-adapter: awsAmplify({
-  customRules: [
-    // Static page
-    { source: "/about/", target: "/about/index.html", status: "200" },
-    // Static dynamic route (e.g. /blog/[slug].astro)
-    { source: "/blog/<slug>/", target: "/blog/<slug>/index.html", status: "200" },
-  ],
-}),
-```
-
-Adjust the trailing slash on `source` and `target` to match your [`trailingSlash`](https://docs.astro.build/en/reference/configuration-reference/#trailingslash) setting — drop it for `"never"`, keep it for `"always"` and the default `"ignore"`. For sites served under a `base`, prefix accordingly (`/base/about/` → `/base/about/index.html`). Like every other entry in `customRules`, you'll need to [apply the generated file](#apply-the-rules-to-your-amplify-app) to your Amplify app for these rewrites to take effect.
-
-The other option is to set up the same rules manually in the Amplify Console under **Hosting → Rewrites and redirects** — useful if you'd rather not put them in your Astro config or already manage Amplify rules outside of code.
-
-For example, if you have a static `/about` page, create a rewrite of:
-
+For example, a page at `/about/` produces:
 ```
 /about/ /about/index.html 200 (Rewrite)
 ```
 
-If you don't use [trailing slashes](https://docs.astro.build/en/reference/configuration-reference/#trailingslash), you will need to also add:
+Dynamic routes preserve their placeholders (`/blog/[slug].astro` → `/blog/<slug> /blog/<slug>/index.html`), catch-all spreads use `<*>`, file-extension pages (like `/rss.xml`) pass through with source and target identical, and the `base` path and `trailingSlash` settings are respected throughout.
 
-```
-/about /about/index.html 200 (Rewrite)
-```
-
-For static dynamic routes, like a route of `/blog/[slug].astro`, create a rewrite of:
-
-```
-/blog/<slug>/ /blog/<slug>/index.html 200 (Rewrite)
-```
-
-For sites served under a `base`:
-
-```
-/base/about/ /base/about/index.html 200 (Rewrite)
-```
+You can still override a prerender rewrite by declaring a matching rule in `customRules` — user-supplied rules are appended after auto-generated ones and take precedence by ordering.
 
 ### 404 Pages
 Custom 404 pages (like `404.astro`) need to be server-side rendered (not prerendered) to work. This is a [limitation with Amplify](https://docs.aws.amazon.com/amplify/latest/userguide/ssr-deployment-specification.html#catchall-fallback-routing).
