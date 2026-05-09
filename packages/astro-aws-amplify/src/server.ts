@@ -29,7 +29,7 @@ const MIME_TYPES: Record<string, string> = {
 };
 
 const app = createApp();
-const logger = app.getAdapterLogger();
+const logger = "adapterLogger" in app ? app.adapterLogger : app.getAdapterLogger();
 const port = Number(process.env.PORT) || 3000;
 const host = process.env.HOST || "0.0.0.0";
 
