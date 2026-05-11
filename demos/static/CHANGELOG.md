@@ -4,6 +4,13 @@
 
 ### Patch Changes
 
+- Updated dependencies []:
+  - astro-aws-amplify@0.4.1
+
+## 0.0.13
+
+### Patch Changes
+
 - Upgrade to Astro 6, migrate content collections to Content Layer API
 - Renamed from `hybrid` to `static` to reflect `output: "static"` mode (`output: "hybrid"` was removed in Astro 6)
 - Updated dependencies:

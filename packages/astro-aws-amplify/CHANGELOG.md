@@ -1,5 +1,11 @@
 # astro-aws-amplify
 
+## 0.4.1
+
+### Patch Changes
+
+- Fix compatibility with Astro 6.3.0+ where `getAdapterLogger()` was renamed to `adapterLogger` getter property
+
 ## 0.4.0
 
 ### Minor Changes
