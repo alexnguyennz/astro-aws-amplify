@@ -2,7 +2,7 @@
   "name": "static",
   "type": "module",
   "private": true,
-  "version": "0.0.12",
+  "version": "0.0.13",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

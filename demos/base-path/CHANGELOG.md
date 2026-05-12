@@ -4,6 +4,13 @@
 
 ### Patch Changes
 
+- Updated dependencies []:
+  - astro-aws-amplify@0.4.1
+
+## 0.0.13
+
+### Patch Changes
+
 - Upgrade to Astro 6, migrate content collections to Content Layer API
 - Updated dependencies:
   - astro-aws-amplify@0.3.0
