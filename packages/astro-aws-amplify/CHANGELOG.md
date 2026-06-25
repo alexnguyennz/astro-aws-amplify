@@ -1,5 +1,13 @@
 # astro-aws-amplify
 
+## 0.5.0
+
+### Minor Changes
+
+- Add support for Astro 7 — widen the `astro` peer dependency to `^6.0.0 || ^7.0.0`. Astro 6 and 7 share the same adapter API, and Astro 7's move to Vite 8 (Rolldown) is transparent to the adapter, so it works unchanged on both majors.
+- Report the actual installed Astro version in the generated `deploy-manifest.json` `framework.version` instead of the previously hardcoded `"6.0.0"`.
+- Declare `adapterFeatures.buildOutput: "server"` explicitly, since Amplify always deploys a Node compute (previously relied on this being Astro's implicit default).
+
 ## 0.4.1
 
 ### Patch Changes
