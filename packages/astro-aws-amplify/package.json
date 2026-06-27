@@ -1,6 +1,6 @@
 {
   "name": "astro-aws-amplify",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "private": false,
   "description": "Deploy Astro to AWS Amplify (SSR)",
   "keywords": [
@@ -25,6 +25,6 @@
     "./redirects": "./src/redirects.ts"
   },
   "peerDependencies": {
-    "astro": "^6.0.0"
+    "astro": "^6.0.0 || ^7.0.0"
   }
 }

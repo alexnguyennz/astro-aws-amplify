@@ -4,6 +4,7 @@ import type {
   IntegrationResolvedRoute,
 } from "astro";
 
+import { createRequire } from "node:module";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -15,6 +16,13 @@ export type {
   AmplifyCustomRule,
   AmplifyRedirectStatus,
 } from "./redirects.js";
+
+// The Astro version the site is built with, reported to Amplify Hosting in the
+// generated `deploy-manifest.json`. Read from the installed `astro` package so
+// it always reflects the actual version rather than a value hardcoded here.
+const { version: astroVersion } = createRequire(import.meta.url)(
+  "astro/package.json",
+) as { version: string };
 
 export interface AwsAmplifyOptions {
   /**
@@ -63,6 +71,13 @@ export default function awsAmplify(
           name: "astro-aws-amplify",
           serverEntrypoint: "astro-aws-amplify/server",
           entrypointResolution: "auto",
+          // Amplify always deploys a Node compute (the `default` resource in
+          // `deploy-manifest.json`), so force a server build even when the
+          // user configures `output: "static"`. Prerendered pages are still
+          // emitted to the static directory and served from the edge.
+          adapterFeatures: {
+            buildOutput: "server",
+          },
           supportedAstroFeatures: {
             serverOutput: "stable",
             hybridOutput: "stable",
@@ -116,7 +131,7 @@ export default function awsAmplify(
           ],
           framework: {
             name: "astro",
-            version: "6.0.0",
+            version: astroVersion,
           },
         };
 
