@@ -10,7 +10,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { AmplifyCustomRule } from "./redirects.js";
-import { buildCustomRules } from "./redirects.js";
+import { buildCustomRules, buildPrerenderRewrites } from "./redirects.js";
 
 export type {
   AmplifyCustomRule,
@@ -146,24 +146,39 @@ export default function awsAmplify(
         );
 
         // Translate `redirects` from astro.config.mjs into Amplify's
-        // customRules format, then append any user-supplied rules from the
-        // `customRules` adapter option verbatim. Amplify Hosting does not
-        // auto-discover redirect rules from a build artifact the way
-        // Vercel/Netlify do, so this file is meant to be applied to the app
-        // via the Amplify Console, the AWS CLI, or an `amplify.yml`
-        // postBuild step. See the README "Redirects" section for the full
-        // deployment workflow.
+        // customRules format, then generate rewrite rules for prerendered
+        // pages, and finally append any user-supplied rules from the
+        // `customRules` adapter option verbatim.
         //
-        // Skipped when both lists are empty so builds don't emit an empty
-        // config alongside the rest of the artifact tree.
+        // Prerender rewrites live between redirects and user custom rules so
+        // that explicit redirects take priority over static-file rewrites,
+        // while user-provided catch-alls (e.g. SPA fallback) come last.
+        //
+        // Amplify Hosting does not auto-discover redirect rules from a build
+        // artifact the way Vercel/Netlify do, so this file is meant to be
+        // applied to the app via the Amplify Console, the AWS CLI, or an
+        // `amplify.yml` postBuild step. See the README "Redirects" section
+        // for the full deployment workflow.
+        //
+        // Skipped when all three lists are empty so builds don't emit an
+        // empty config alongside the rest of the artifact tree.
         const generatedRules = buildCustomRules(
           _routes,
           _config.base,
           _config.trailingSlash,
           logger,
         );
+        const prerenderRewrites = buildPrerenderRewrites(
+          _routes,
+          _config.base,
+          _config.trailingSlash,
+        );
         const extraRules = options.customRules ?? [];
-        const allRules = [...generatedRules, ...extraRules];
+        const allRules = [
+          ...generatedRules,
+          ...prerenderRewrites,
+          ...extraRules,
+        ];
 
         if (allRules.length > 0) {
           await writeFile(
@@ -174,6 +189,9 @@ export default function awsAmplify(
           const parts: string[] = [];
           if (generatedRules.length > 0) {
             parts.push(`${generatedRules.length} from redirects`);
+          }
+          if (prerenderRewrites.length > 0) {
+            parts.push(`${prerenderRewrites.length} from prerendered pages`);
           }
           if (extraRules.length > 0) {
             parts.push(`${extraRules.length} from customRules`);
