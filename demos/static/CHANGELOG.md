@@ -1,5 +1,12 @@
 # static
 
+## 0.0.14
+
+### Patch Changes
+
+- Updated dependencies [[`c6b3511`](https://github.com/alexnguyennz/astro-aws-amplify/commit/c6b35117fbf60cc0e1ea0bc8d4841be5d7469052)]:
+  - astro-aws-amplify@0.6.0
+
 ## 0.0.13
 
 ### Patch Changes

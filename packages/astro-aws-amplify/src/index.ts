@@ -43,6 +43,29 @@ export interface AwsAmplifyOptions {
    * here won't shadow a specific redirect from `astro.config.mjs`.
    */
   customRules?: AmplifyCustomRule[];
+
+  /**
+   * Names of environment variables to propagate from the build environment
+   * to the Lambda runtime. They are written as a `.env` file next to
+   * `entry.mjs`, which `server.ts` loads at cold start via
+   * `process.loadEnvFile()`.
+   *
+   * AWS Amplify Hosting injects environment variables into the build
+   * environment (CodeBuild) but does not automatically expose them to the
+   * Lambda compute. This option closes the gap so users don't have to
+   * `echo "X=$X" >> .env && mv .env ./.amplify-hosting/compute/default/`
+   * in `amplify.yml`.
+   *
+   * Values are read from `process.env` at build time. Missing variables
+   * emit a warning at build time and are skipped — no empty `KEY=` lines
+   * are written.
+   *
+   * @example
+   *   awsAmplify({
+   *     runtimeEnv: ["STRIPE_SECRET_KEY", "DATABASE_URL"],
+   *   })
+   */
+  runtimeEnv?: string[];
 }
 
 export default function awsAmplify(
@@ -183,6 +206,58 @@ export default function awsAmplify(
               allRules.length === 1 ? "" : "s"
             } (${parts.join(", ")}) → .amplify-hosting/customRules.json`,
           );
+        }
+
+        // Propagate selected build-time environment variables to the
+        // Lambda runtime by writing them to a `.env` file next to
+        // entry.mjs. `server.ts` loads it via process.loadEnvFile() on
+        // cold start. See `runtimeEnv` in AwsAmplifyOptions for the
+        // rationale.
+        const runtimeEnvNames = options.runtimeEnv ?? [];
+        if (runtimeEnvNames.length > 0) {
+          const lines: string[] = [];
+          const missing: string[] = [];
+
+          for (const name of runtimeEnvNames) {
+            const value = process.env[name];
+            if (value === undefined || value === "") {
+              missing.push(name);
+              continue;
+            }
+            // Quote values containing whitespace, `=`, `#`, quotes, or
+            // newlines — characters dotenv parsing dislikes. Plain
+            // alphanumeric values (the common case for API keys, IDs,
+            // URLs without spaces) stay unquoted.
+            const needsQuoting = /[\n\r#"' =]/.test(value);
+            const escaped = needsQuoting
+              ? `"${value
+                  .replace(/\\/g, "\\\\")
+                  .replace(/"/g, '\\"')
+                  .replace(/\n/g, "\\n")}"`
+              : value;
+            lines.push(`${name}=${escaped}`);
+          }
+
+          if (missing.length > 0) {
+            logger.warn(
+              `runtimeEnv: ${missing.length} variable${
+                missing.length === 1 ? "" : "s"
+              } not set in build environment: ${missing.join(", ")}. ` +
+                `These will be unavailable in the Lambda runtime.`,
+            );
+          }
+
+          if (lines.length > 0) {
+            await writeFile(
+              join(amplifyHostingDir, "compute/default/.env"),
+              lines.join("\n") + "\n",
+            );
+            logger.info(
+              `Wrote ${lines.length} runtime env var${
+                lines.length === 1 ? "" : "s"
+              } → .amplify-hosting/compute/default/.env`,
+            );
+          }
         }
       },
     },
