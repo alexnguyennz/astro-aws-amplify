@@ -1,5 +1,11 @@
 # astro-aws-amplify
 
+## 0.6.0
+
+### Minor Changes
+
+- [`c6b3511`](https://github.com/alexnguyennz/astro-aws-amplify/commit/c6b35117fbf60cc0e1ea0bc8d4841be5d7469052) Thanks [@KabraX](https://github.com/KabraX)! - Add runtimeEnv option that lists environment variables to propagate from the build to the Lambda runtime. Adapter writes them as a .env file next to entry.mjs, which server.ts already loads at cold start via process.loadEnvFile(). Missing variables emit a warning at build time and are skipped instead of writing empty KEY= lines.
+
 ## 0.5.0
 
 ### Minor Changes
